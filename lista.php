@@ -15,6 +15,13 @@ foreach ($form[FETCH] as $processo => $dados){
 	foreach ($form[TITULO] as $linha){
 			echo "<TD>". $dados[$linha] ."</td>"; 
 		}
+		
+		foreach ($form[ACOES] as $acao){
+			 
+				echo "<TD><a href='$PHP_SELF?processo=$processo&idworkflow=". $acao[idworkflow] ."&lista=". $acao[lista] ."&idposto=".$acao[ir]."'>". $acao[acao] ."</a></td>";
+			 
+		}
+		
 	echo "</tr>";
 }
  

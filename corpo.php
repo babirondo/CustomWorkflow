@@ -2,12 +2,13 @@
 <?php
 if ($_GET["idposto"] > 0){
 	
-	if ($_GET["lista"]==1)
+	if ($_GET["lista"]=="L")
 	{
 		require_once("lista.php");
 	
 	}
-	else
+	else if ($_GET["lista"]=="F")
+	
 	{
 		require_once("form.php");
 	
