@@ -1,11 +1,13 @@
 <?php 
-error_reporting(E_ALL );
+error_reporting(E_ALL ^ E_NOTICE );
 
 require_once("classes/globais.php");
 require_once("classes/diversos.php");
  // testando commit do mac 2
 
 $retorno = CallAPI("get", $SERVER_API."getWorkflows/");
+if ($_GET["idworkflow"] > 0)
+	$postos = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/getPostos/");
 
 ?>
 
@@ -24,7 +26,7 @@ $retorno = CallAPI("get", $SERVER_API."getWorkflows/");
 					  <tr>
 					  <?php 
 					  foreach ($retorno[FETCH] as $linha){
-					  	echo "<TD>". $linha["workflow"]."</td>";
+					  	echo "<TD> <a href='$PHP_SELF?idworkflow=". $linha["idworkflow"]."&idposto=". $linha["postoinicial"]."'>". $linha["workflow"]."</a></td>";
 					  	
 					  }
 					  ?>
@@ -33,10 +35,21 @@ $retorno = CallAPI("get", $SERVER_API."getWorkflows/");
 				</td>
 			</tr>
 			<tr height=5%>
-				<td>menu</td>
+				<td>
+					<table border=0 width=100% >
+					  <tr>
+					  <?php 
+					  foreach ($postos[FETCH] as $linha){
+					  	echo "<TD> <a href='$PHP_SELF?idworkflow=".$_GET["idworkflow"]."&lista=". $linha["lista"]."&idposto=". $linha["idposto"]."'>". $linha["posto"]."</a></td>";
+					  	
+					  }
+					  ?>
+					  </tr>
+					</table>
+				</td>
 			</tr>
 			<tr >
-				<td>corpo</td>
+				<td><?=require_once("corpo.php")?></td>
 			</tr>
 			<tr  height=10%>
 				<td>footer</td>

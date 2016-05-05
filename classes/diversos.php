@@ -8,8 +8,10 @@ function CallAPI($method, $url, $data = false)
 		case "POST":
 			curl_setopt($curl, CURLOPT_POST, 1);
 
-			if ($data)
+			if ($data){
 				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+				curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+			}
 				break;
 		case "PUT":
 			curl_setopt($curl, CURLOPT_PUT, 1);
@@ -22,7 +24,9 @@ function CallAPI($method, $url, $data = false)
 	// Optional Authentication:
 	//curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 	//curl_setopt($curl, CURLOPT_USERPWD, "username:password");
- 
+ 	
+	echo " <BR> curl -H 'Content-Type: application/json' -X POST -d '$data' $url  ";
+	
 	curl_setopt($curl, CURLOPT_URL, $url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
