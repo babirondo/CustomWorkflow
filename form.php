@@ -14,7 +14,8 @@ if ($_POST["processar"]==1)
 	}
 	$array[processo][valor]  = $_POST["processo"];	
 	$array[processo][acao]  = $_POST["finalizar"];
-		
+	$array[processo][idworkflowtramitacao_original]  = $_POST["H"];
+	
 	$registering = CallAPI("POST", $SERVER_API."Registrar/".$_GET["idworkflow"]."/".$_GET["idposto"] , json_encode( $array) );
 
 	if ($registering["resultado"] == "SUCESSO"){
@@ -27,7 +28,8 @@ if ($_POST["processar"]==1)
 
 	//if ($form[DADOS_POSTO][starter] != 1)
 		echo "<input type=hidden name=processo value='".$_GET["processo"]."' >";
-	
+		echo "<input type=hidden name=H value='".$_GET["H"]."' >";
+		
 		foreach ($form[FETCH] as $linha){
 			echo "<tr>
 			    	<TD>". $linha["campo"]."</td>";
