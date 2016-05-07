@@ -1,4 +1,15 @@
-<?php 
+<?php
+ 
+
+session_start();
+
+if (!$_SESSION["idusuariologado"])
+{
+	header("Location: login.php");
+}
+else if ($_SESSION["idusuariologado"] > 0 )  
+{
+
 error_reporting(E_ALL ^ E_NOTICE );
 
 require_once("classes/globais.php");
@@ -6,8 +17,12 @@ require_once("classes/diversos.php");
  // testando commit do mac 2
 
 $retorno = CallAPI("get", $SERVER_API."getWorkflows/");
-if ($_GET["idworkflow"] > 0)
-	$postos = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/getPostos/");
+if ($_GET["idworkflow"] > 0){
+	$array=null;
+	$array[idusuario] = $_SESSION["idusuariologado"]; 
+	$postos = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPostos/", json_encode( $array));
+	$array=null;
+}
 
 ?>
 
@@ -18,7 +33,15 @@ if ($_GET["idworkflow"] > 0)
 	<body>
 		<table border=1 cellspacing=0 cellpadding=0  width=100% height=100%>
 			<tr  height=15%>
-				<td>cabecalho</td>
+				<td>
+					<table border=0 width=100%>
+						<tr>
+							<td>cabecalho</td>
+							<td align=right><a href='logout.php'>Logout</a></td>
+						</tr>
+					</table>
+				</td>
+				  
 			</tr>
 			<tr height=5%>
 				<td>
@@ -51,9 +74,10 @@ if ($_GET["idworkflow"] > 0)
 			<tr >
 				<td><?=require_once("corpo.php")?></td>
 			</tr>
-			<tr  height=10%>
-				<td>footer</td>
-			</tr>
+			 
 		</table>
 	</body>
 </html>
+<?php
+} // usuario logado
+?>
