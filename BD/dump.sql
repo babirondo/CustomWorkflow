@@ -86,6 +86,54 @@ ALTER SEQUENCE atores_id_seq OWNED BY atores.id;
 
 
 --
+-- Name: notificacoes_email; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE notificacoes_email (
+    id integer NOT NULL,
+    de character varying,
+    para character varying,
+    titulo character varying,
+    corpo character varying
+);
+
+
+ALTER TABLE notificacoes_email OWNER TO postgres;
+
+--
+-- Name: TABLE notificacoes_email; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON TABLE notificacoes_email IS 'o campo corpo, tem os seguintes parametros:
+{preenchido_no_posto} -> conteudo dos campos preenchidos no posto
+{idprocesso} -> idprocesso do registro
+
+
+ ';
+
+
+--
+-- Name: notificacoes_email_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE notificacoes_email_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE notificacoes_email_id_seq OWNER TO postgres;
+
+--
+-- Name: notificacoes_email_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE notificacoes_email_id_seq OWNED BY notificacoes_email.id;
+
+
+--
 -- Name: posto_acao; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -476,14 +524,13 @@ CREATE TABLE workflow_postos (
     idator integer,
     posto character varying,
     ordem_cronologica integer,
-    sla integer,
-    escalonamento character varying,
     principal integer,
     lista character varying,
     idtipoprocesso integer,
     starter integer,
     avanca_processo integer,
-    execucao_pos_posto character varying
+    notif_saindoposto integer,
+    notif_entrandoposto integer
 );
 
 
@@ -551,6 +598,13 @@ ALTER SEQUENCE workflow_tramitacao_id_seq OWNED BY workflow_tramitacao.id;
 --
 
 ALTER TABLE ONLY atores ALTER COLUMN id SET DEFAULT nextval('atores_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY notificacoes_email ALTER COLUMN id SET DEFAULT nextval('notificacoes_email_id_seq'::regclass);
 
 
 --
@@ -664,6 +718,26 @@ SELECT pg_catalog.setval('atores_id_seq', 85, true);
 
 
 --
+-- Data for Name: notificacoes_email; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY notificacoes_email (id, de, para, titulo, corpo) FROM stdin;
+4	devcontrat@walmart.com	{gestor interessado}	[Processo de Contratacão] Entrevista Candidato: {nome}	{gestor interessado},\n\nFavor entrevista o candidato {nome} o mais rapido possivel, caso ele nao se encaixe no perfil que voce deseja outro gestor poderia considera-lo\n\n\nAtenciosamente,\nEquipe de Contratacão de Desenvolvedores 
+5	{gestor interessado}	{consultoria}	[Processo de Contratacão] Negociacao com candidato {nome}	Ola {consultoria},\n\nPor favor, poderia iniciar o processo de negociacao com o candidato {nome}, referente ao processo seletivo {idprocesso}\n\nAtenciosamente,\n{gestor interessado}
+1	rodrigues@simonsen.br	rodrigues@simonsen.br	[Walmart.com] Abertura de Vaga - Processo Seletivo #{idprocesso}	Olá,\nComunicamos de abertura de nova vaga, Processo Seletivo #{idprocesso}.\n\nJob Description:\n{preenchido_no_posto}\n\t\t\nLembramos que: \n1 - Os candidatos que atenderem as exigências da vaga deverão executar o teste abaixo, em caráter eliminatório.\nhttp://www. github.com. aihua/ teste blabla\n\t\t\n2 - Toda a comunicação a respeito de um candidato deve preservar o número do Processo Seletivo.\n\n3 - Somente serão considerados os candidatos com teste concluído e data de resposta de no máximo um mês a partir deste email.\n\t\t\nAtenciosamente, \nEquipe de Contratação de Desenvolvedores\ndevcontrat@walmart.com
+2	brunorodriguessiqueira@hotmail.com	brunorodriguessiqueira@hotmail.com	[Processo de Contratacão] Novo candidato para ser Classificado - {tecnologia}	Olá,\nUm novo candidato do nosso processo de selecão enviou submeteu seu teste e gostariamos da sua ajuda para avalia-lo.\nVocê ira encontrar todos os dados necessarios no sistema mas adiantamos:\nProcesso Seletivo: {idprocesso}\n{preenchido_no_posto}\n\t\t\nLembramos que: \n1 - O objetivo desta classificacao e enquadra-lo de acordo com as metricas de avaliacão do Walmart. Confira em: \n\t\t\nAtenciosamente, \nEquipe de Contratação de Desenvolvedores\ndevcontrat@walmart.com
+3	devcontrat@walmart.com	{atores}	[Processo de Contratação] Candidato pronto para Roteamento - {tecnologia}:{senioridade}	Gestores, \nExiste um novo candidato pronto para ser entrevistado.\n\nProcesso Seletivo: {idprocesso}\nNome do Candidato: {nome}\n\nAtenciosamente, \nEquipe de Contratação de Desenvolvedores\ndevcontrat@walmart.com\n
+\.
+
+
+--
+-- Name: notificacoes_email_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('notificacoes_email_id_seq', 5, true);
+
+
+--
 -- Data for Name: posto_acao; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -707,6 +781,7 @@ COPY postos_campo (id, idposto, campo, tipotela) FROM stdin;
 5	275	Gestor Interessado	\N
 6	276	Parecer do Gestor em Entrevista Presencial	\N
 7	277	Pos Entrevista, parecer decisorio	\N
+166	273	Consultoria	\N
 \.
 
 
@@ -714,7 +789,7 @@ COPY postos_campo (id, idposto, campo, tipotela) FROM stdin;
 -- Name: postos_campo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('postos_campo_id_seq', 164, true);
+SELECT pg_catalog.setval('postos_campo_id_seq', 166, true);
 
 
 --
@@ -774,80 +849,9 @@ SELECT pg_catalog.setval('postos_campo_lista_id_seq', 51, true);
 --
 
 COPY processos (id, idpai, idtipoprocesso, inicio, idworkflow) FROM stdin;
-191	\N	1	2016-05-06 17:03:39.116482	1
-192	191	2	2016-05-06 17:03:45.708095	1
-193	191	2	2016-05-06 17:03:58.775069	1
-194	191	2	2016-05-06 17:04:10.109254	1
-195	188	2	2016-05-06 17:05:15.118206	1
-196	\N	1	2016-05-06 18:30:42.219372	1
-197	196	2	2016-05-06 18:32:09.62616	1
-198	196	2	2016-05-06 18:39:57.092513	1
-199	\N	1	2016-05-07 01:05:12.843812	1
-200	\N	1	2016-05-07 01:05:52.873302	1
-201	\N	1	2016-05-07 01:07:26.974523	1
-202	\N	1	2016-05-07 01:07:28.132455	1
-203	\N	1	2016-05-07 01:07:28.781539	1
-204	\N	1	2016-05-07 01:07:29.237551	1
-205	\N	1	2016-05-07 01:07:30.517728	1
-206	\N	1	2016-05-07 01:09:11.060358	1
-207	\N	1	2016-05-07 01:10:38.371692	1
-208	\N	1	2016-05-07 01:10:52.24378	1
-209	\N	1	2016-05-07 01:11:37.779209	1
-210	\N	1	2016-05-07 01:11:38.140677	1
-211	\N	1	2016-05-07 01:11:38.442658	1
-212	\N	1	2016-05-07 01:11:48.667196	1
-213	\N	1	2016-05-07 01:12:29.251949	1
-214	\N	1	2016-05-07 01:12:30.818991	1
-215	\N	1	2016-05-07 01:13:43.26511	1
-216	\N	1	2016-05-07 01:13:45.185721	1
-217	\N	1	2016-05-07 01:13:46.248887	1
-218	\N	1	2016-05-07 01:14:07.568589	1
-219	\N	1	2016-05-07 01:20:53.288952	1
-220	\N	1	2016-05-07 01:21:25.411359	1
-221	\N	1	2016-05-07 01:22:37.892605	1
-222	\N	1	2016-05-07 01:23:26.603583	1
-223	\N	1	2016-05-07 01:23:50.89753	1
-224	\N	1	2016-05-07 01:25:55.996546	1
-225	\N	1	2016-05-07 01:30:40.02057	1
-226	\N	1	2016-05-07 01:30:41.700089	1
-227	\N	1	2016-05-07 01:31:19.983411	1
-228	\N	1	2016-05-07 01:38:54.969021	1
-229	\N	1	2016-05-07 01:40:58.033252	1
-230	\N	1	2016-05-07 01:42:16.916215	1
-231	\N	1	2016-05-07 01:44:19.78955	1
-232	\N	1	2016-05-07 01:44:21.358744	1
-233	\N	1	2016-05-07 01:44:21.796129	1
-234	\N	1	2016-05-07 01:44:22.086851	1
-235	\N	1	2016-05-07 01:44:22.351241	1
-236	\N	1	2016-05-07 01:44:22.604948	1
-237	\N	1	2016-05-07 01:52:48.565599	1
-238	\N	1	2016-05-07 01:52:49.507207	1
-239	\N	1	2016-05-07 01:52:50.1232	1
-240	\N	1	2016-05-07 01:52:50.563681	1
-241	\N	1	2016-05-07 01:54:33.716783	1
-242	\N	1	2016-05-07 01:55:55.420359	1
-243	\N	1	2016-05-07 02:05:32.474367	1
-244	\N	1	2016-05-07 02:07:46.531815	1
-245	\N	1	2016-05-07 02:08:40.228389	1
-246	\N	1	2016-05-07 02:10:00.656767	1
-247	\N	1	2016-05-07 02:10:39.123757	1
-248	\N	1	2016-05-07 02:15:06.592481	1
-249	\N	1	2016-05-07 02:17:36.407444	1
-250	\N	1	2016-05-07 02:17:47.047689	1
-251	246	2	2016-05-07 02:23:24.459236	1
-252	\N	1	2016-05-07 02:25:03.535385	1
-253	\N	1	2016-05-07 02:25:26.843333	1
-254	\N	1	2016-05-07 02:25:52.080784	1
-255	\N	1	2016-05-07 02:27:13.116564	1
-256	\N	1	2016-05-07 02:28:05.936671	1
-257	\N	1	2016-05-07 02:29:39.104344	1
-258	\N	1	2016-05-07 02:30:17.372024	1
-259	\N	1	2016-05-07 02:30:46.493878	1
-260	\N	1	2016-05-07 02:31:03.200452	1
-261	\N	1	2016-05-07 02:31:35.499159	1
-262	\N	1	2016-05-07 02:41:18.195466	1
-263	\N	1	2016-05-07 02:43:27.045779	1
-264	263	2	2016-05-07 02:45:36.500392	1
+365	\N	1	2016-05-08 03:28:13.571955	1
+366	365	2	2016-05-08 03:28:19.216252	1
+367	365	2	2016-05-08 03:28:21.17079	1
 \.
 
 
@@ -855,7 +859,7 @@ COPY processos (id, idpai, idtipoprocesso, inicio, idworkflow) FROM stdin;
 -- Name: processos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('processos_id_seq', 264, true);
+SELECT pg_catalog.setval('processos_id_seq', 367, true);
 
 
 --
@@ -965,175 +969,24 @@ COPY workflow (id, workflow, posto_inicial, posto_final) FROM stdin;
 --
 
 COPY workflow_dados (id, idpostocampo, valor, idprocesso, registro) FROM stdin;
-600	1	dknjkj	191	2016-05-06 17:03:39.117768
-601	13	nkjndksa	191	2016-05-06 17:03:39.118546
-602	12	dkjasnkj	192	2016-05-06 17:03:45.709142
-603	11	nkjndaskjn	192	2016-05-06 17:03:45.709841
-604	2	ndkjsan	192	2016-05-06 17:03:45.710358
-605	3	knjdas	192	2016-05-06 17:03:45.710917
-606	12	iuewqoi	193	2016-05-06 17:03:58.776055
-607	11	oiuewqoie	193	2016-05-06 17:03:58.777612
-608	2	oiuewoqi	193	2016-05-06 17:03:58.778328
-609	3	oiuewoq	193	2016-05-06 17:03:58.779109
-610	12	mais um	194	2016-05-06 17:04:10.110284
-611	11	 front tec	194	2016-05-06 17:04:10.11093
-612	2	 front tec	194	2016-05-06 17:04:10.111409
-613	3	 front tec	194	2016-05-06 17:04:10.111845
-614	4	foi soi	194	2016-05-06 17:04:17.804917
-615	10	foi sim	194	2016-05-06 17:04:17.806025
-616	4	aaaa	192	2016-05-06 17:04:27.723672
-617	10	ssss	192	2016-05-06 17:04:27.725382
-618	5	bruno	194	2016-05-06 17:04:32.04148
-619	12	fdsfds	195	2016-05-06 17:05:15.119091
-620	11	nkj	195	2016-05-06 17:05:15.119683
-621	2	nkj	195	2016-05-06 17:05:15.120105
-622	3	nk	195	2016-05-06 17:05:15.120537
-623	1	preciso de um cara de angular	196	2016-05-06 18:30:42.236072
-624	13	frontend	196	2016-05-06 18:30:42.251543
-625	12	node.js	197	2016-05-06 18:32:09.627143
-626	11	otavio	197	2016-05-06 18:32:09.628307
-627	2	ndsjkandk	197	2016-05-06 18:32:09.628787
-628	3	ddd	197	2016-05-06 18:32:09.629224
-629	4	jr	197	2016-05-06 18:32:40.639508
-630	10	nkjdsakdsapokwep	197	2016-05-06 18:32:40.656434
-631	5	Mari	197	2016-05-06 18:33:12.792934
-632	6	gostei do perfil profssional ... animado	197	2016-05-06 18:34:05.684435
-633	7	mora em barueri	197	2016-05-06 18:34:40.892844
-634	163	50	197	2016-05-06 18:35:25.027318
-635	164	13/04/2017	197	2016-05-06 18:35:25.028407
-636	12	 ruby	198	2016-05-06 18:39:57.093416
-637	11	luciano	198	2016-05-06 18:39:57.094061
-638	2	lslsll	198	2016-05-06 18:39:57.094494
-639	3	ppeoe	198	2016-05-06 18:39:57.095305
-640	1	mmmm	207	2016-05-07 01:10:38.375602
-641	13	,,,,,	207	2016-05-07 01:10:38.376594
-642	1	mmmm	208	2016-05-07 01:10:52.245015
-643	13	,,,,,	208	2016-05-07 01:10:52.245739
-644	1	mmmm	209	2016-05-07 01:11:37.780186
-645	13	,,,,,	209	2016-05-07 01:11:37.7809
-646	1	mmmm	210	2016-05-07 01:11:38.141686
-647	13	,,,,,	210	2016-05-07 01:11:38.142248
-648	1	mmmm	211	2016-05-07 01:11:38.44364
-649	13	,,,,,	211	2016-05-07 01:11:38.444349
-650	1	mmmm	212	2016-05-07 01:11:48.668355
-651	13	,,,,,	212	2016-05-07 01:11:48.668991
-652	1	mmmm	213	2016-05-07 01:12:29.253002
-653	13	,,,,,	213	2016-05-07 01:12:29.253609
-654	1	mmmm	214	2016-05-07 01:12:30.819933
-655	13	,,,,,	214	2016-05-07 01:12:30.82049
-656	1	mmmm	215	2016-05-07 01:13:43.266366
-657	13	,,,,,	215	2016-05-07 01:13:43.267319
-658	1	mmmm	216	2016-05-07 01:13:45.186697
-659	13	,,,,,	216	2016-05-07 01:13:45.187286
-660	1	mmmm	217	2016-05-07 01:13:46.250033
-661	13	,,,,,	217	2016-05-07 01:13:46.250596
-662	1	mmmm	218	2016-05-07 01:14:07.570056
-663	13	,,,,,	218	2016-05-07 01:14:07.571162
-664	1	mmmm	219	2016-05-07 01:20:53.289982
-665	13	,,,,,	219	2016-05-07 01:20:53.290652
-666	1	mmmm	220	2016-05-07 01:21:25.412396
-667	13	,,,,,	220	2016-05-07 01:21:25.412972
-668	1	mmmm	221	2016-05-07 01:22:37.894529
-669	13	,,,,,	221	2016-05-07 01:22:37.895266
-670	1	mmmm	222	2016-05-07 01:23:26.604598
-671	13	,,,,,	222	2016-05-07 01:23:26.605173
-672	1	mmmm	223	2016-05-07 01:23:50.898512
-673	13	,,,,,	223	2016-05-07 01:23:50.899135
-674	1	mmmm	224	2016-05-07 01:25:55.997565
-675	13	,,,,,	224	2016-05-07 01:25:55.998176
-676	1	mmmm	225	2016-05-07 01:30:40.021602
-677	13	,,,,,	225	2016-05-07 01:30:40.022369
-678	1	mmmm	226	2016-05-07 01:30:41.701065
-679	13	,,,,,	226	2016-05-07 01:30:41.701673
-680	1	mmmm	227	2016-05-07 01:31:19.98446
-681	13	,,,,,	227	2016-05-07 01:31:19.985112
-682	1	mmmm	228	2016-05-07 01:38:54.984261
-683	13	,,,,,	228	2016-05-07 01:38:54.984931
-684	1	mmmm	229	2016-05-07 01:40:58.034725
-685	13	,,,,,	229	2016-05-07 01:40:58.03586
-686	1	mmmm	230	2016-05-07 01:42:16.933882
-687	13	,,,,,	230	2016-05-07 01:42:16.949414
-688	1	mmmm	231	2016-05-07 01:44:19.790795
-689	13	,,,,,	231	2016-05-07 01:44:19.791629
-690	1	mmmm	232	2016-05-07 01:44:21.359751
-691	13	,,,,,	232	2016-05-07 01:44:21.360318
-692	1	mmmm	233	2016-05-07 01:44:21.797249
-693	13	,,,,,	233	2016-05-07 01:44:21.797817
-694	1	mmmm	234	2016-05-07 01:44:22.088349
-695	13	,,,,,	234	2016-05-07 01:44:22.089292
-696	1	mmmm	235	2016-05-07 01:44:22.352257
-697	13	,,,,,	235	2016-05-07 01:44:22.352868
-698	1	mmmm	236	2016-05-07 01:44:22.605915
-699	13	,,,,,	236	2016-05-07 01:44:22.606649
-700	1	mmmm	237	2016-05-07 01:52:48.582236
-701	13	,,,,,	237	2016-05-07 01:52:48.583286
-702	1	mmmm	238	2016-05-07 01:52:49.508356
-703	13	,,,,,	238	2016-05-07 01:52:49.508927
-704	1	mmmm	239	2016-05-07 01:52:50.124154
-705	13	,,,,,	239	2016-05-07 01:52:50.124701
-706	1	mmmm	240	2016-05-07 01:52:50.564664
-707	13	,,,,,	240	2016-05-07 01:52:50.565204
-708	1	mmmm	241	2016-05-07 01:54:33.717796
-709	13	,,,,,	241	2016-05-07 01:54:33.718372
-710	1	mmmm	242	2016-05-07 01:55:55.421447
-711	13	,,,,,	242	2016-05-07 01:55:55.422083
-712	1	mmmm	243	2016-05-07 02:05:32.47554
-713	13	,,,,,	243	2016-05-07 02:05:32.476284
-714	1	mmmm	244	2016-05-07 02:07:46.532838
-715	13	,,,,,	244	2016-05-07 02:07:46.533398
-716	1	mmmm	245	2016-05-07 02:08:40.229423
-717	13	,,,,,	245	2016-05-07 02:08:40.230003
-718	1	mmmm	246	2016-05-07 02:10:00.657818
-719	13	,,,,,	246	2016-05-07 02:10:00.658474
-720	1	mmmm	247	2016-05-07 02:10:39.124775
-721	13	,,,,,	247	2016-05-07 02:10:39.125525
-722	1	mmmm	248	2016-05-07 02:15:06.597317
-723	13	,,,,,	248	2016-05-07 02:15:06.598475
-724	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	249	2016-05-07 02:17:36.423861
-725	13	frontend	249	2016-05-07 02:17:36.439627
-726	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	250	2016-05-07 02:17:47.048697
-727	13	frontend	250	2016-05-07 02:17:47.049262
-728	12	iii	251	2016-05-07 02:23:24.460233
-729	11	jj	251	2016-05-07 02:23:24.460899
-730	2	kk	251	2016-05-07 02:23:24.46132
-731	3	mm	251	2016-05-07 02:23:24.461749
-732	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	252	2016-05-07 02:25:03.536413
-733	13	frontend	252	2016-05-07 02:25:03.537056
-734	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	253	2016-05-07 02:25:26.844454
-735	13	frontend	253	2016-05-07 02:25:26.845057
-736	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	254	2016-05-07 02:25:52.08193
-737	13	frontend	254	2016-05-07 02:25:52.082709
-738	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	255	2016-05-07 02:27:13.117557
-739	13	frontend	255	2016-05-07 02:27:13.11817
-740	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	256	2016-05-07 02:28:05.937729
-741	13	frontend	256	2016-05-07 02:28:05.93856
-742	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	257	2016-05-07 02:29:39.105385
-743	13	frontend	257	2016-05-07 02:29:39.106068
-744	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	258	2016-05-07 02:30:17.37306
-745	13	frontend	258	2016-05-07 02:30:17.373618
-746	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	259	2016-05-07 02:30:46.494877
-747	13	frontend	259	2016-05-07 02:30:46.495515
-748	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	260	2016-05-07 02:31:03.201397
-749	13	frontend	260	2016-05-07 02:31:03.202033
-750	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	261	2016-05-07 02:31:35.500248
-751	13	frontend	261	2016-05-07 02:31:35.500896
-752	1	desenvolver com 5 anos de experiencia e conhecimentos em angular e ruby	262	2016-05-07 02:41:18.19656
-753	13	frontend	262	2016-05-07 02:41:18.197173
-754	1	experiência em gestao de multiplos times simultaneoamente, em ambiente de ecommerce de missao critica... e gestao aproximada de 50 associados.	263	2016-05-07 02:43:27.046797
-755	13	Gerente de Desenvolvimento	263	2016-05-07 02:43:27.047573
-756	12	PHP	264	2016-05-07 02:45:36.501814
-757	11	Bruno Siqueira	264	2016-05-07 02:45:36.502577
-758	2	babirono.git	264	2016-05-07 02:45:36.503065
-759	3	lllpopopoll	264	2016-05-07 02:45:36.503515
-760	4	Manager	264	2016-05-07 02:46:18.862024
-761	10	De boa!	264	2016-05-07 02:46:18.863138
-762	9	sss	197	2016-05-07 02:53:51.791155
-763	5	Denis	264	2016-05-07 02:54:11.30863
-764	6	ok	264	2016-05-07 02:54:23.129891
-765	7	vai	264	2016-05-07 02:54:30.339353
-766	163	FTE	264	2016-05-07 02:54:39.609485
-767	164	FTE	264	2016-05-07 02:54:39.610671
-768	9	sss	264	2016-05-07 02:54:46.814941
+1146	1	nkj	365	2016-05-08 03:28:13.572913
+1147	13	n	365	2016-05-08 03:28:13.573532
+1148	12		366	2016-05-08 03:28:19.217193
+1149	11	nkjn	366	2016-05-08 03:28:19.217814
+1150	2	k	366	2016-05-08 03:28:19.218263
+1151	3	kjn	366	2016-05-08 03:28:19.218699
+1152	166	k	366	2016-05-08 03:28:19.219133
+1153	12		367	2016-05-08 03:28:21.171762
+1154	11		367	2016-05-08 03:28:21.172343
+1155	2		367	2016-05-08 03:28:21.172805
+1156	3		367	2016-05-08 03:28:21.173241
+1157	166		367	2016-05-08 03:28:21.178279
+1158	4		367	2016-05-08 03:28:27.04607
+1159	10	niun	367	2016-05-08 03:28:27.047284
+1160	5	 k	367	2016-05-08 03:28:32.555163
+1161	6	 jkhbj	367	2016-05-08 03:28:37.996988
+1162	7	sadasdsad	367	2016-05-08 03:29:28.848807
+1163	7	sadasdsad	367	2016-05-08 03:29:36.767664
 \.
 
 
@@ -1141,7 +994,7 @@ COPY workflow_dados (id, idpostocampo, valor, idprocesso, registro) FROM stdin;
 -- Name: workflow_dados_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('workflow_dados_id_seq', 768, true);
+SELECT pg_catalog.setval('workflow_dados_id_seq', 1163, true);
 
 
 --
@@ -1155,22 +1008,22 @@ SELECT pg_catalog.setval('workflow_id_seq', 25, true);
 -- Data for Name: workflow_postos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY workflow_postos (id, id_workflow, idator, posto, ordem_cronologica, sla, escalonamento, principal, lista, idtipoprocesso, starter, avanca_processo, execucao_pos_posto) FROM stdin;
-279	1	\N	Onboarding de novo membro	\N	\N	babirondo@gmail.com	0	F	2	\N	\N	\N
-273	1	3	lançar candidato	\N	2	babirondo@gmail.com	0	F	2	0	3	\N
-274	1	1	Classificação de Senioridade	\N	\N	babirondo@gmail.com	0	F	2	\N	4	\N
-275	1	\N	Encaminhar para Gestor	\N	\N	babirondo@gmail.com	0	F	2	\N	5	\N
-276	1	\N	Dados da Entrevista	\N	\N	babirondo@gmail.com	0	F	2	\N	6	\N
-277	1	\N	Encaminhar para Negociacão	\N	\N	babirondo@gmail.com	0	F	2	\N	8	\N
-278	1	\N	Dados da Contratação	\N	\N	babirondo@gmail.com	0	F	2	\N	7	\N
-2	1	3	cadastra retorno	2	0	babirondo@gmail.com	1	L	1	1	\N	\N
-3	1	2	classificacao	3	3	babirondo@gmail.com	1	L	2	\N	\N	\N
-4	1	85	roteamento	4	8	babirondo@gmail.com	1	L	2	\N	\N	\N
-5	1	85	entrevista presencial	5	6	babirondo@gmail.com	1	L	2	\N	\N	\N
-6	1	85	entrevistados	6	7	babirondo@gmail.com	1	L	2	\N	\N	\N
-8	1	85	negociar com consultoria	7	7	babirondo@gmail.com	1	L	2	\N	\N	\N
-7	1	85	onboarding	8	7	babirondo@gmail.com	1	L	2	\N	\N	\N
-1	1	85	job description	1	0	babirondo@gmail.com	1	F	1	1	2	PosPosto/1.php
+COPY workflow_postos (id, id_workflow, idator, posto, ordem_cronologica, principal, lista, idtipoprocesso, starter, avanca_processo, notif_saindoposto, notif_entrandoposto) FROM stdin;
+6	1	85	entrevistados	6	1	L	2	\N	\N	\N	\N
+279	1	\N	Onboarding de novo membro	\N	0	F	2	\N	\N	\N	\N
+273	1	3	lançar candidato	\N	0	F	2	0	3	\N	\N
+274	1	1	Classificação de Senioridade	\N	0	F	2	\N	4	\N	\N
+275	1	\N	Encaminhar para Gestor	\N	0	F	2	\N	5	\N	\N
+276	1	\N	Dados da Entrevista	\N	0	F	2	\N	6	\N	\N
+277	1	\N	Encaminhar para Negociacão	\N	0	F	2	\N	8	\N	\N
+278	1	\N	Dados da Contratação	\N	0	F	2	\N	7	\N	\N
+2	1	3	cadastra retorno	2	1	L	1	1	\N	\N	\N
+7	1	85	onboarding	8	1	L	2	\N	\N	\N	\N
+1	1	85	job description	1	1	F	1	1	2	1	\N
+3	1	2	classificacao	3	1	L	2	\N	\N	\N	2
+4	1	85	roteamento	4	1	L	2	\N	\N	\N	3
+5	1	85	entrevista presencial	5	1	L	2	\N	\N	\N	4
+8	1	85	negociar com consultoria	7	1	L	2	\N	\N	\N	5
 \.
 
 
@@ -1186,143 +1039,14 @@ SELECT pg_catalog.setval('workflow_postos_id_seq', 279, true);
 --
 
 COPY workflow_tramitacao (id, idprocesso, idworkflowposto, inicio, fim) FROM stdin;
-82	191	1	2016-05-06 17:03:39.132867	2016-05-06 17:03:39.132867
-83	191	2	2016-05-06 17:03:39.134031	\N
-85	193	3	2016-05-06 17:03:58.780293	\N
-86	194	3	2016-05-06 17:04:10.112612	2016-05-06 17:04:17.808829
-88	192	4	2016-05-06 17:04:27.726483	\N
-84	192	3	2016-05-06 17:03:45.711836	2016-05-06 17:04:27.728635
-89	194	5	2016-05-06 17:04:32.99556	\N
-87	194	4	2016-05-06 17:04:17.806878	2016-05-06 17:04:32.998489
-90	195	3	2016-05-06 17:05:15.121346	\N
-91	196	1	2016-05-06 18:30:42.252631	2016-05-06 18:30:42.252631
-92	196	2	2016-05-06 18:30:42.253471	\N
-93	197	3	2016-05-06 18:32:09.630107	2016-05-06 18:32:40.674299
-94	197	4	2016-05-06 18:32:40.672064	2016-05-06 18:33:12.796445
-95	197	5	2016-05-06 18:33:12.794447	2016-05-06 18:34:05.687725
-96	197	6	2016-05-06 18:34:05.685906	2016-05-06 18:34:40.896221
-97	197	8	2016-05-06 18:34:40.894301	2016-05-06 18:35:25.031463
-99	198	3	2016-05-06 18:39:57.096134	\N
-100	207	1	2016-05-07 01:10:38.377581	2016-05-07 01:10:38.377581
-101	207	2	2016-05-07 01:10:38.379546	\N
-102	208	1	2016-05-07 01:10:52.246607	2016-05-07 01:10:52.246607
-103	208	2	2016-05-07 01:10:52.247309	\N
-104	209	1	2016-05-07 01:11:37.781714	2016-05-07 01:11:37.781714
-105	209	2	2016-05-07 01:11:37.782436	\N
-106	210	1	2016-05-07 01:11:38.143112	2016-05-07 01:11:38.143112
-107	210	2	2016-05-07 01:11:38.148415	\N
-108	211	1	2016-05-07 01:11:38.445149	2016-05-07 01:11:38.445149
-109	211	2	2016-05-07 01:11:38.445818	\N
-110	212	1	2016-05-07 01:11:48.6698	2016-05-07 01:11:48.6698
-111	212	2	2016-05-07 01:11:48.675012	\N
-112	213	1	2016-05-07 01:12:29.254439	2016-05-07 01:12:29.254439
-113	213	2	2016-05-07 01:12:29.259502	\N
-114	214	1	2016-05-07 01:12:30.821356	2016-05-07 01:12:30.821356
-115	214	2	2016-05-07 01:12:30.826563	\N
-116	215	1	2016-05-07 01:13:43.26867	2016-05-07 01:13:43.26867
-117	215	2	2016-05-07 01:13:43.272824	\N
-118	216	1	2016-05-07 01:13:45.188085	2016-05-07 01:13:45.188085
-119	216	2	2016-05-07 01:13:45.193281	\N
-120	217	1	2016-05-07 01:13:46.251388	2016-05-07 01:13:46.251388
-121	217	2	2016-05-07 01:13:46.256491	\N
-122	218	1	2016-05-07 01:14:07.572177	2016-05-07 01:14:07.572177
-123	218	2	2016-05-07 01:14:07.572864	\N
-124	219	1	2016-05-07 01:20:53.308099	2016-05-07 01:20:53.308099
-125	219	2	2016-05-07 01:20:53.308822	\N
-126	220	1	2016-05-07 01:21:25.413832	2016-05-07 01:21:25.413832
-127	220	2	2016-05-07 01:21:25.419006	\N
-128	221	1	2016-05-07 01:22:37.896127	2016-05-07 01:22:37.896127
-129	221	2	2016-05-07 01:22:37.896807	\N
-130	222	1	2016-05-07 01:23:26.606006	2016-05-07 01:23:26.606006
-131	222	2	2016-05-07 01:23:26.611194	\N
-132	223	1	2016-05-07 01:23:50.900105	2016-05-07 01:23:50.900105
-133	223	2	2016-05-07 01:23:50.905117	\N
-134	224	1	2016-05-07 01:25:55.998972	2016-05-07 01:25:55.998972
-135	224	2	2016-05-07 01:25:55.999636	\N
-136	225	1	2016-05-07 01:30:40.023184	2016-05-07 01:30:40.023184
-137	225	2	2016-05-07 01:30:40.023819	\N
-138	226	1	2016-05-07 01:30:41.702455	2016-05-07 01:30:41.702455
-139	226	2	2016-05-07 01:30:41.703077	\N
-140	227	1	2016-05-07 01:31:19.985905	2016-05-07 01:31:19.985905
-141	227	2	2016-05-07 01:31:19.986535	\N
-142	228	1	2016-05-07 01:38:54.986076	2016-05-07 01:38:54.986076
-143	228	2	2016-05-07 01:38:54.986794	\N
-144	229	1	2016-05-07 01:40:58.037132	2016-05-07 01:40:58.037132
-145	229	2	2016-05-07 01:40:58.038319	\N
-146	230	1	2016-05-07 01:42:16.950528	2016-05-07 01:42:16.950528
-147	230	2	2016-05-07 01:42:16.951252	\N
-148	231	1	2016-05-07 01:44:19.792678	2016-05-07 01:44:19.792678
-149	231	2	2016-05-07 01:44:19.797487	\N
-150	232	1	2016-05-07 01:44:21.361133	2016-05-07 01:44:21.361133
-151	232	2	2016-05-07 01:44:21.366284	\N
-152	233	1	2016-05-07 01:44:21.798684	2016-05-07 01:44:21.798684
-153	233	2	2016-05-07 01:44:21.803659	\N
-154	234	1	2016-05-07 01:44:22.090375	2016-05-07 01:44:22.090375
-155	234	2	2016-05-07 01:44:22.091137	\N
-156	235	1	2016-05-07 01:44:22.353739	2016-05-07 01:44:22.353739
-157	235	2	2016-05-07 01:44:22.354406	\N
-158	236	1	2016-05-07 01:44:22.607462	2016-05-07 01:44:22.607462
-159	236	2	2016-05-07 01:44:22.608116	\N
-160	237	1	2016-05-07 01:52:48.584656	2016-05-07 01:52:48.584656
-161	237	2	2016-05-07 01:52:48.585568	\N
-162	238	1	2016-05-07 01:52:49.509857	2016-05-07 01:52:49.509857
-163	238	2	2016-05-07 01:52:49.515436	\N
-164	239	1	2016-05-07 01:52:50.125493	2016-05-07 01:52:50.125493
-165	239	2	2016-05-07 01:52:50.131343	\N
-166	240	1	2016-05-07 01:52:50.566188	2016-05-07 01:52:50.566188
-167	240	2	2016-05-07 01:52:50.571801	\N
-168	241	1	2016-05-07 01:54:33.719133	2016-05-07 01:54:33.719133
-169	241	2	2016-05-07 01:54:33.724764	\N
-170	242	1	2016-05-07 01:55:55.422914	2016-05-07 01:55:55.422914
-171	242	2	2016-05-07 01:55:55.42359	\N
-172	243	1	2016-05-07 02:05:32.477181	2016-05-07 02:05:32.477181
-173	243	2	2016-05-07 02:05:32.477923	\N
-174	244	1	2016-05-07 02:07:46.534246	2016-05-07 02:07:46.534246
-175	244	2	2016-05-07 02:07:46.539439	\N
-176	245	1	2016-05-07 02:08:40.230876	2016-05-07 02:08:40.230876
-177	245	2	2016-05-07 02:08:40.235842	\N
-178	246	1	2016-05-07 02:10:00.676308	2016-05-07 02:10:00.676308
-179	246	2	2016-05-07 02:10:00.677122	\N
-180	247	1	2016-05-07 02:10:39.126348	2016-05-07 02:10:39.126348
-181	247	2	2016-05-07 02:10:39.127065	\N
-182	248	1	2016-05-07 02:15:06.605461	2016-05-07 02:15:06.605461
-183	248	2	2016-05-07 02:15:06.609978	\N
-184	249	1	2016-05-07 02:17:36.440662	2016-05-07 02:17:36.440662
-185	249	2	2016-05-07 02:17:36.441412	\N
-186	250	1	2016-05-07 02:17:47.050054	2016-05-07 02:17:47.050054
-187	250	2	2016-05-07 02:17:47.055453	\N
-188	251	3	2016-05-07 02:23:24.462534	\N
-189	252	1	2016-05-07 02:25:03.554894	2016-05-07 02:25:03.554894
-190	252	2	2016-05-07 02:25:03.555764	\N
-191	253	1	2016-05-07 02:25:26.84583	2016-05-07 02:25:26.84583
-192	253	2	2016-05-07 02:25:26.850952	\N
-193	254	1	2016-05-07 02:25:52.083882	2016-05-07 02:25:52.083882
-194	254	2	2016-05-07 02:25:52.08476	\N
-195	255	1	2016-05-07 02:27:13.118998	2016-05-07 02:27:13.118998
-196	255	2	2016-05-07 02:27:13.124112	\N
-197	256	1	2016-05-07 02:28:05.939483	2016-05-07 02:28:05.939483
-198	256	2	2016-05-07 02:28:05.944298	\N
-199	257	1	2016-05-07 02:29:39.10686	2016-05-07 02:29:39.10686
-200	257	2	2016-05-07 02:29:39.107515	\N
-201	258	1	2016-05-07 02:30:17.374405	2016-05-07 02:30:17.374405
-202	258	2	2016-05-07 02:30:17.379606	\N
-203	259	1	2016-05-07 02:30:46.496309	2016-05-07 02:30:46.496309
-204	259	2	2016-05-07 02:30:46.501393	\N
-205	260	1	2016-05-07 02:31:03.202861	2016-05-07 02:31:03.202861
-206	260	2	2016-05-07 02:31:03.208168	\N
-207	261	1	2016-05-07 02:31:35.501715	2016-05-07 02:31:35.501715
-208	261	2	2016-05-07 02:31:35.502354	\N
-209	262	1	2016-05-07 02:41:18.198106	2016-05-07 02:41:18.198106
-210	262	2	2016-05-07 02:41:18.203234	\N
-211	263	1	2016-05-07 02:43:27.048518	2016-05-07 02:43:27.048518
-212	263	2	2016-05-07 02:43:27.049222	\N
-213	264	3	2016-05-07 02:45:36.504318	2016-05-07 02:46:18.865988
-98	197	7	2016-05-06 18:35:25.029456	2016-05-07 02:53:56.060355
-214	264	4	2016-05-07 02:46:18.863989	2016-05-07 02:54:13.232626
-215	264	5	2016-05-07 02:54:13.230455	2016-05-07 02:54:23.133314
-216	264	6	2016-05-07 02:54:23.131342	2016-05-07 02:54:30.433255
-217	264	8	2016-05-07 02:54:30.414956	2016-05-07 02:54:39.614086
-218	264	7	2016-05-07 02:54:39.611486	2016-05-07 02:54:46.817758
+473	365	1	2016-05-08 03:28:13.574355	2016-05-08 03:28:13.574355
+474	365	2	2016-05-08 03:28:13.584812	\N
+475	367	3	2016-05-08 03:28:21.179237	2016-05-08 03:28:27.08659
+476	367	4	2016-05-08 03:28:27.048184	2016-05-08 03:28:32.627251
+477	367	5	2016-05-08 03:28:32.572658	2016-05-08 03:28:38.01764
+479	367	8	2016-05-08 03:29:28.850384	\N
+480	367	8	2016-05-08 03:29:36.769287	\N
+478	367	6	2016-05-08 03:28:37.998522	2016-05-08 03:29:36.809281
 \.
 
 
@@ -1330,7 +1054,7 @@ COPY workflow_tramitacao (id, idprocesso, idworkflowposto, inicio, fim) FROM std
 -- Name: workflow_tramitacao_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('workflow_tramitacao_id_seq', 218, true);
+SELECT pg_catalog.setval('workflow_tramitacao_id_seq', 480, true);
 
 
 --
