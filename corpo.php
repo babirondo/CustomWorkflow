@@ -1,6 +1,6 @@
 <table border=1>
 <?php
-if ($_GET["idposto"] > 0){
+if ($_GET["idposto"] != null){
 	
 	if ($_GET["lista"]=="L")
 	{

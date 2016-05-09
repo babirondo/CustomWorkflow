@@ -175,8 +175,7 @@ ALTER SEQUENCE posto_acao_id_seq OWNED BY posto_acao.id;
 CREATE TABLE postos_campo (
     id integer NOT NULL,
     idposto integer,
-    campo character varying,
-    tipotela character varying
+    campo character varying
 );
 
 
@@ -451,7 +450,8 @@ CREATE TABLE workflow (
     id integer NOT NULL,
     workflow character varying,
     posto_inicial integer,
-    posto_final integer
+    posto_final integer,
+    posto_finalizados integer
 );
 
 
@@ -725,6 +725,7 @@ COPY notificacoes_email (id, de, para, titulo, corpo) FROM stdin;
 4	devcontrat@walmart.com	{gestor interessado}	[Processo de Contratacão] Entrevista Candidato: {nome}	{gestor interessado},\n\nFavor entrevista o candidato {nome} o mais rapido possivel, caso ele nao se encaixe no perfil que voce deseja outro gestor poderia considera-lo\n\n\nAtenciosamente,\nEquipe de Contratacão de Desenvolvedores 
 5	{gestor interessado}	{consultoria}	[Processo de Contratacão] Negociacao com candidato {nome}	Ola {consultoria},\n\nPor favor, poderia iniciar o processo de negociacao com o candidato {nome}, referente ao processo seletivo {idprocesso}\n\nAtenciosamente,\n{gestor interessado}
 1	rodrigues@simonsen.br	rodrigues@simonsen.br	[Walmart.com] Abertura de Vaga - Processo Seletivo #{idprocesso}	Olá,\nComunicamos de abertura de nova vaga, Processo Seletivo #{idprocesso}.\n\nJob Description: {job description}\nTipo de Vaga: {tipovaga}\n\t\t\nLembramos que: \n1 - Os candidatos que atenderem as exigências da vaga deverão executar o teste abaixo, em caráter eliminatório.\nhttp://www. github.com. aihua/ teste blabla\n\t\t\n2 - Toda a comunicação a respeito de um candidato deve preservar o número do Processo Seletivo.\n\n3 - Somente serão considerados os candidatos com teste concluído e data de resposta de no máximo um mês a partir deste email.\n\t\t\nAtenciosamente, \nEquipe de Contratação de Desenvolvedores\ndevcontrat@walmart.com
+6	{gestor interessado}	{consultoria}	[Processo de Contratação] Contratar:{nome} - Processo Seletivo: {idprocesso}	Olá {consultoria},\n\nGostaria de comunicar a aprovação do candidato {nome}, referente ao processo seletivo {idprocesso}.\n\nData de Inicio esperada: {data de inicio}\nValor/Hora negociada: {Valor/Hora}\n\nAtenciosamente, \n{Gestor Interessado}\n
 2	brunorodriguessiqueira@hotmail.com	brunorodriguessiqueira@hotmail.com	[Processo de Contratacão] Novo candidato para ser Classificado - {tecnologia}	Olá,\nUm novo candidato do nosso processo de selecão enviou submeteu seu teste e gostariamos da sua ajuda para avalia-lo.\nVocê ira encontrar todos os dados necessarios no sistema mas adiantamos:\nProcesso Seletivo: {idprocesso}\n{preenchido_no_posto}\n\t\t\nLembramos que: \n1 - O objetivo desta classificacao e enquadra-lo de acordo com as metricas de avaliacão do Walmart. Confira em: \n\t\t\nAtenciosamente, \nEquipe de Contratação de Desenvolvedores\ndevcontrat@walmart.com
 3	devcontrat@walmart.com	{atores}	[Processo de Contratação] Candidato pronto para Roteamento - {tecnologia}:{senioridade}	Gestores, \nExiste um novo candidato pronto para ser entrevistado.\n\nProcesso Seletivo: {idprocesso}\nNome do Candidato: {nome}\n\nAtenciosamente, \nEquipe de Contratação de Desenvolvedores\ndevcontrat@walmart.com\n
 \.
@@ -734,7 +735,7 @@ COPY notificacoes_email (id, de, para, titulo, corpo) FROM stdin;
 -- Name: notificacoes_email_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('notificacoes_email_id_seq', 5, true);
+SELECT pg_catalog.setval('notificacoes_email_id_seq', 6, true);
 
 
 --
@@ -765,23 +766,23 @@ SELECT pg_catalog.setval('posto_acao_id_seq', 310, true);
 -- Data for Name: postos_campo; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY postos_campo (id, idposto, campo, tipotela) FROM stdin;
-1	1	job description	\N
-8	8	dados da negociacao	\N
-13	1	tipovaga	\N
-12	273	tecnologia	\N
-11	273	nome	\N
-2	273	github	\N
-3	273	cv	\N
-4	274	senioridade	\N
-163	278	Valor/Hora	\N
-164	278	Data de Inicio	\N
-9	279	checklist executado ?	\N
-10	274	Parecer da Classificação dos Devs	\N
-5	275	Gestor Interessado	\N
-6	276	Parecer do Gestor em Entrevista Presencial	\N
-7	277	Pos Entrevista, parecer decisorio	\N
-166	273	Consultoria	\N
+COPY postos_campo (id, idposto, campo) FROM stdin;
+1	1	job description
+8	8	dados da negociacao
+13	1	tipovaga
+12	273	tecnologia
+11	273	nome
+2	273	github
+3	273	cv
+4	274	senioridade
+163	278	Valor/Hora
+164	278	Data de Inicio
+9	279	checklist executado ?
+10	274	Parecer da Classificação dos Devs
+5	275	Gestor Interessado
+6	276	Parecer do Gestor em Entrevista Presencial
+7	277	Pos Entrevista, parecer decisorio
+166	273	Consultoria
 \.
 
 
@@ -834,6 +835,11 @@ COPY postos_campo_lista (id, idposto, idpostocampo) FROM stdin;
 47	7	13
 50	7	163
 51	7	164
+52	280	1
+53	280	13
+54	280	11
+55	280	12
+56	280	4
 \.
 
 
@@ -841,7 +847,7 @@ COPY postos_campo_lista (id, idposto, idpostocampo) FROM stdin;
 -- Name: postos_campo_lista_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('postos_campo_lista_id_seq', 51, true);
+SELECT pg_catalog.setval('postos_campo_lista_id_seq', 56, true);
 
 
 --
@@ -849,14 +855,10 @@ SELECT pg_catalog.setval('postos_campo_lista_id_seq', 51, true);
 --
 
 COPY processos (id, idpai, idtipoprocesso, inicio, idworkflow) FROM stdin;
-508	\N	1	2016-05-09 02:06:21.757771	1
-509	\N	1	2016-05-09 02:08:34.85938	1
-510	508	2	2016-05-09 02:15:31.76989	1
-511	\N	1	2016-05-09 02:19:25.156111	1
-512	\N	1	2016-05-09 02:19:40.281971	1
-513	\N	1	2016-05-09 02:19:42.07194	1
-514	\N	1	2016-05-09 02:20:06.695037	1
-515	512	2	2016-05-09 02:20:54.370323	1
+523	\N	1	2016-05-09 13:02:32.492004	1
+524	523	2	2016-05-09 13:02:46.026526	1
+525	523	2	2016-05-09 13:10:16.377386	1
+526	523	2	2016-05-09 13:10:29.280266	1
 \.
 
 
@@ -864,7 +866,7 @@ COPY processos (id, idpai, idtipoprocesso, inicio, idworkflow) FROM stdin;
 -- Name: processos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('processos_id_seq', 515, true);
+SELECT pg_catalog.setval('processos_id_seq', 526, true);
 
 
 --
@@ -963,9 +965,9 @@ SELECT pg_catalog.setval('usuarios_id_seq', 4, true);
 -- Data for Name: workflow; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY workflow (id, workflow, posto_inicial, posto_final) FROM stdin;
-1	recrutamento e slecao de dev	2	7
-25	fluxo 2 	\N	\N
+COPY workflow (id, workflow, posto_inicial, posto_final, posto_finalizados) FROM stdin;
+25	fluxo 2 	\N	\N	\N
+1	recrutamento e slecao de dev	2	7	280
 \.
 
 
@@ -974,35 +976,44 @@ COPY workflow (id, workflow, posto_inicial, posto_final) FROM stdin;
 --
 
 COPY workflow_dados (id, idpostocampo, valor, idprocesso, registro) FROM stdin;
-1444	1	 precisa saber de angular	508	2016-05-09 02:06:21.75879
-1445	13	frontend	508	2016-05-09 02:06:21.759487
-1446	1	kkk	509	2016-05-09 02:08:34.860389
-1447	13	jjjjj	509	2016-05-09 02:08:34.86105
-1448	12	java	510	2016-05-09 02:15:31.770784
-1449	11	luciano	510	2016-05-09 02:15:31.771488
-1450	2	 jjj	510	2016-05-09 02:15:31.771919
-1451	3	lll	510	2016-05-09 02:15:31.772368
-1452	166	mazza	510	2016-05-09 02:15:31.773235
-1453	4	pl	510	2016-05-09 02:18:38.94638
-1454	10	nota 7	510	2016-05-09 02:18:38.947575
-1455	5	paffi	510	2016-05-09 02:18:50.225232
-1456	1	novo processo defront	511	2016-05-09 02:19:25.15714
-1457	13	front aannc	511	2016-05-09 02:19:25.157762
-1458	1	precisa saber de angular	512	2016-05-09 02:19:40.297411
-1459	13	frontend	512	2016-05-09 02:19:40.29799
-1460	1	novo processo defront	513	2016-05-09 02:19:42.072983
-1461	13	front aannc	513	2016-05-09 02:19:42.073563
-1462	1	novo processo defront	514	2016-05-09 02:20:06.696037
-1463	13	front aannc	514	2016-05-09 02:20:06.696631
-1464	12	tecn	515	2016-05-09 02:20:54.371395
-1465	11	nom	515	2016-05-09 02:20:54.372036
-1466	2	gitb	515	2016-05-09 02:20:54.372486
-1467	3	cvvc	515	2016-05-09 02:20:54.372939
-1468	166	 mazza	515	2016-05-09 02:20:54.373395
-1469	4	sr +	515	2016-05-09 02:21:04.785101
-1470	10	9	515	2016-05-09 02:21:04.786215
-1471	4	sr +	515	2016-05-09 02:21:19.23956
-1472	10	9	515	2016-05-09 02:21:19.240847
+1524	1	precisa saber de angular	523	2016-05-09 13:02:32.493058
+1525	13	frontend	523	2016-05-09 13:02:32.493722
+1526	12	css	524	2016-05-09 13:02:46.027411
+1527	11	bruno	524	2016-05-09 13:02:46.028019
+1528	2	git	524	2016-05-09 13:02:46.028452
+1529	3	cv	524	2016-05-09 13:02:46.028884
+1530	166	mazza	524	2016-05-09 13:02:46.029319
+1531	12	tec	525	2016-05-09 13:10:16.378309
+1532	11	siqueira	525	2016-05-09 13:10:16.379015
+1533	2	kkk	525	2016-05-09 13:10:16.379483
+1534	3	zz	525	2016-05-09 13:10:16.379924
+1535	166	ginga	525	2016-05-09 13:10:16.38035
+1536	12	jjn	526	2016-05-09 13:10:29.281223
+1537	11	rodrigues	526	2016-05-09 13:10:29.281831
+1538	2	mm	526	2016-05-09 13:10:29.282288
+1539	3	nn	526	2016-05-09 13:10:29.282809
+1540	166	Avenue Code	526	2016-05-09 13:10:29.283217
+1541	4	SR	524	2016-05-09 13:10:37.8069
+1542	10	1	524	2016-05-09 13:10:37.808019
+1543	5	paffi	524	2016-05-09 13:10:44.196228
+1544	6	foi	524	2016-05-09 13:10:49.568186
+1545	6	Parecer do Gestor em Entrevista Presencial	524	2016-05-09 13:11:09.666258
+1546	4	pl	526	2016-05-09 13:11:35.282675
+1547	10	2	526	2016-05-09 13:11:35.283778
+1548	5	denis	526	2016-05-09 13:11:42.613221
+1549	5	denis	526	2016-05-09 13:11:47.697716
+1550	7	7	524	2016-05-09 13:12:09.704222
+1551	163	163	524	2016-05-09 13:12:17.990536
+1552	164	164	524	2016-05-09 13:12:17.991655
+1553	9	9	524	2016-05-09 13:12:23.523904
+1554	4	jr	525	2016-05-09 13:13:05.42917
+1555	10	xxx	525	2016-05-09 13:13:05.430306
+1556	5	bruno	525	2016-05-09 13:13:22.10039
+1557	6	xxxx	525	2016-05-09 13:13:28.004705
+1558	7	xxxx	525	2016-05-09 13:13:33.776181
+1559	163	xx	525	2016-05-09 13:13:39.569672
+1560	164	xxx	525	2016-05-09 13:13:39.570716
+1561	9	xxx	525	2016-05-09 13:13:46.66385
 \.
 
 
@@ -1010,7 +1021,7 @@ COPY workflow_dados (id, idpostocampo, valor, idprocesso, registro) FROM stdin;
 -- Name: workflow_dados_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('workflow_dados_id_seq', 1472, true);
+SELECT pg_catalog.setval('workflow_dados_id_seq', 1561, true);
 
 
 --
@@ -1026,13 +1037,14 @@ SELECT pg_catalog.setval('workflow_id_seq', 25, true);
 
 COPY workflow_postos (id, id_workflow, idator, posto, ordem_cronologica, principal, lista, idtipoprocesso, starter, avanca_processo, notif_saindoposto, notif_entrandoposto) FROM stdin;
 6	1	85	entrevistados	6	1	L	2	\N	\N	\N	\N
-279	1	\N	Onboarding de novo membro	\N	0	F	2	\N	\N	\N	\N
+278	1	\N	Dados da Contratação	\N	0	F	2	\N	7	6	\N
+280	1	\N	Processos Finalizados	9	1	L	\N	\N	\N	\N	\N
+279	1	\N	Onboarding de novo membro	\N	0	F	2	\N	280	\N	\N
 273	1	3	lançar candidato	\N	0	F	2	0	3	\N	\N
 274	1	1	Classificação de Senioridade	\N	0	F	2	\N	4	\N	\N
 275	1	\N	Encaminhar para Gestor	\N	0	F	2	\N	5	\N	\N
 276	1	\N	Dados da Entrevista	\N	0	F	2	\N	6	\N	\N
 277	1	\N	Encaminhar para Negociacão	\N	0	F	2	\N	8	\N	\N
-278	1	\N	Dados da Contratação	\N	0	F	2	\N	7	\N	\N
 2	1	3	cadastra retorno	2	1	L	1	1	\N	\N	\N
 7	1	85	onboarding	8	1	L	2	\N	\N	\N	\N
 1	1	85	job description	1	1	F	1	1	2	1	\N
@@ -1047,7 +1059,7 @@ COPY workflow_postos (id, id_workflow, idator, posto, ordem_cronologica, princip
 -- Name: workflow_postos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('workflow_postos_id_seq', 279, true);
+SELECT pg_catalog.setval('workflow_postos_id_seq', 280, true);
 
 
 --
@@ -1055,23 +1067,25 @@ SELECT pg_catalog.setval('workflow_postos_id_seq', 279, true);
 --
 
 COPY workflow_tramitacao (id, idprocesso, idworkflowposto, inicio, fim) FROM stdin;
-751	508	1	2016-05-09 02:06:21.760369	2016-05-09 02:06:21.760369
-752	508	2	2016-05-09 02:06:21.770502	\N
-753	509	1	2016-05-09 02:08:34.861863	2016-05-09 02:08:34.861863
-754	509	2	2016-05-09 02:08:34.871946	\N
-755	510	3	2016-05-09 02:15:31.774084	2016-05-09 02:18:38.965108
-757	510	5	2016-05-09 02:18:50.226688	\N
-756	510	4	2016-05-09 02:18:38.948415	2016-05-09 02:18:50.243982
-758	511	1	2016-05-09 02:19:25.158606	2016-05-09 02:19:25.158606
-759	511	2	2016-05-09 02:19:25.16826	\N
-760	512	1	2016-05-09 02:19:40.299327	2016-05-09 02:19:40.299327
-761	512	2	2016-05-09 02:19:40.31026	\N
-762	513	1	2016-05-09 02:19:42.074453	2016-05-09 02:19:42.074453
-763	513	2	2016-05-09 02:19:42.089816	\N
-764	514	1	2016-05-09 02:20:06.697403	2016-05-09 02:20:06.697403
-765	515	3	2016-05-09 02:20:54.374203	\N
-766	515	4	2016-05-09 02:21:04.78704	\N
-767	515	4	2016-05-09 02:21:19.241636	\N
+787	523	1	2016-05-09 13:02:32.494515	2016-05-09 13:02:32.494515
+788	523	2	2016-05-09 13:02:32.503504	\N
+789	524	3	2016-05-09 13:02:46.030089	2016-05-09 13:10:37.824711
+792	524	4	2016-05-09 13:10:37.808857	2016-05-09 13:10:44.213916
+793	524	5	2016-05-09 13:10:44.197659	2016-05-09 13:11:09.683659
+791	526	3	2016-05-09 13:10:29.283985	2016-05-09 13:11:35.300856
+796	526	5	2016-05-09 13:11:47.699185	\N
+795	526	4	2016-05-09 13:11:35.284858	2016-05-09 13:11:47.71466
+794	524	6	2016-05-09 13:11:09.66769	2016-05-09 13:12:09.721793
+797	524	8	2016-05-09 13:12:09.705718	2016-05-09 13:12:18.00806
+799	524	280	2016-05-09 13:12:23.525352	\N
+798	524	7	2016-05-09 13:12:17.992487	2016-05-09 13:12:23.541008
+790	525	3	2016-05-09 13:10:16.38118	2016-05-09 13:13:05.447223
+800	525	4	2016-05-09 13:13:05.431152	2016-05-09 13:13:22.117734
+801	525	5	2016-05-09 13:13:22.101831	2016-05-09 13:13:28.022751
+802	525	6	2016-05-09 13:13:28.006191	2016-05-09 13:13:33.793624
+803	525	8	2016-05-09 13:13:33.777667	2016-05-09 13:13:39.588091
+805	525	280	2016-05-09 13:13:46.665304	\N
+804	525	7	2016-05-09 13:13:39.571882	2016-05-09 13:13:46.68038
 \.
 
 
@@ -1079,7 +1093,7 @@ COPY workflow_tramitacao (id, idprocesso, idworkflowposto, inicio, fim) FROM std
 -- Name: workflow_tramitacao_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('workflow_tramitacao_id_seq', 767, true);
+SELECT pg_catalog.setval('workflow_tramitacao_id_seq', 805, true);
 
 
 --
