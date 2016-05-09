@@ -12,11 +12,16 @@ function CallAPI($method, $url, $data = false)
 				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 				curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 			}
-				break;
+			echo " <BR> curl -H 'Content-Type: application/json' -X POST -d '$data' $url  ";
+			break;
 		case "PUT":
 			curl_setopt($curl, CURLOPT_PUT, 1);
+			echo " <BR> curl -H 'Content-Type: application/json' -X POST -d '$data' $url  ";
+				
 			break;
 		default:
+			echo " <BR>   $url  ";
+				
 			if ($data)
 				$url = sprintf("%s?%s", $url, http_build_query($data));
 	}
@@ -25,7 +30,7 @@ function CallAPI($method, $url, $data = false)
 	//curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 	//curl_setopt($curl, CURLOPT_USERPWD, "username:password");
  	
-	echo " <BR> curl -H 'Content-Type: application/json' -X POST -d '$data' $url  ";
+	 
 	
 	curl_setopt($curl, CURLOPT_URL, $url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);

@@ -724,7 +724,7 @@ SELECT pg_catalog.setval('atores_id_seq', 85, true);
 COPY notificacoes_email (id, de, para, titulo, corpo) FROM stdin;
 4	devcontrat@walmart.com	{gestor interessado}	[Processo de Contratacão] Entrevista Candidato: {nome}	{gestor interessado},\n\nFavor entrevista o candidato {nome} o mais rapido possivel, caso ele nao se encaixe no perfil que voce deseja outro gestor poderia considera-lo\n\n\nAtenciosamente,\nEquipe de Contratacão de Desenvolvedores 
 5	{gestor interessado}	{consultoria}	[Processo de Contratacão] Negociacao com candidato {nome}	Ola {consultoria},\n\nPor favor, poderia iniciar o processo de negociacao com o candidato {nome}, referente ao processo seletivo {idprocesso}\n\nAtenciosamente,\n{gestor interessado}
-1	rodrigues@simonsen.br	rodrigues@simonsen.br	[Walmart.com] Abertura de Vaga - Processo Seletivo #{idprocesso}	Olá,\nComunicamos de abertura de nova vaga, Processo Seletivo #{idprocesso}.\n\nJob Description:\n{preenchido_no_posto}\n\t\t\nLembramos que: \n1 - Os candidatos que atenderem as exigências da vaga deverão executar o teste abaixo, em caráter eliminatório.\nhttp://www. github.com. aihua/ teste blabla\n\t\t\n2 - Toda a comunicação a respeito de um candidato deve preservar o número do Processo Seletivo.\n\n3 - Somente serão considerados os candidatos com teste concluído e data de resposta de no máximo um mês a partir deste email.\n\t\t\nAtenciosamente, \nEquipe de Contratação de Desenvolvedores\ndevcontrat@walmart.com
+1	rodrigues@simonsen.br	rodrigues@simonsen.br	[Walmart.com] Abertura de Vaga - Processo Seletivo #{idprocesso}	Olá,\nComunicamos de abertura de nova vaga, Processo Seletivo #{idprocesso}.\n\nJob Description: {job description}\nTipo de Vaga: {tipovaga}\n\t\t\nLembramos que: \n1 - Os candidatos que atenderem as exigências da vaga deverão executar o teste abaixo, em caráter eliminatório.\nhttp://www. github.com. aihua/ teste blabla\n\t\t\n2 - Toda a comunicação a respeito de um candidato deve preservar o número do Processo Seletivo.\n\n3 - Somente serão considerados os candidatos com teste concluído e data de resposta de no máximo um mês a partir deste email.\n\t\t\nAtenciosamente, \nEquipe de Contratação de Desenvolvedores\ndevcontrat@walmart.com
 2	brunorodriguessiqueira@hotmail.com	brunorodriguessiqueira@hotmail.com	[Processo de Contratacão] Novo candidato para ser Classificado - {tecnologia}	Olá,\nUm novo candidato do nosso processo de selecão enviou submeteu seu teste e gostariamos da sua ajuda para avalia-lo.\nVocê ira encontrar todos os dados necessarios no sistema mas adiantamos:\nProcesso Seletivo: {idprocesso}\n{preenchido_no_posto}\n\t\t\nLembramos que: \n1 - O objetivo desta classificacao e enquadra-lo de acordo com as metricas de avaliacão do Walmart. Confira em: \n\t\t\nAtenciosamente, \nEquipe de Contratação de Desenvolvedores\ndevcontrat@walmart.com
 3	devcontrat@walmart.com	{atores}	[Processo de Contratação] Candidato pronto para Roteamento - {tecnologia}:{senioridade}	Gestores, \nExiste um novo candidato pronto para ser entrevistado.\n\nProcesso Seletivo: {idprocesso}\nNome do Candidato: {nome}\n\nAtenciosamente, \nEquipe de Contratação de Desenvolvedores\ndevcontrat@walmart.com\n
 \.
@@ -849,9 +849,14 @@ SELECT pg_catalog.setval('postos_campo_lista_id_seq', 51, true);
 --
 
 COPY processos (id, idpai, idtipoprocesso, inicio, idworkflow) FROM stdin;
-365	\N	1	2016-05-08 03:28:13.571955	1
-366	365	2	2016-05-08 03:28:19.216252	1
-367	365	2	2016-05-08 03:28:21.17079	1
+508	\N	1	2016-05-09 02:06:21.757771	1
+509	\N	1	2016-05-09 02:08:34.85938	1
+510	508	2	2016-05-09 02:15:31.76989	1
+511	\N	1	2016-05-09 02:19:25.156111	1
+512	\N	1	2016-05-09 02:19:40.281971	1
+513	\N	1	2016-05-09 02:19:42.07194	1
+514	\N	1	2016-05-09 02:20:06.695037	1
+515	512	2	2016-05-09 02:20:54.370323	1
 \.
 
 
@@ -859,7 +864,7 @@ COPY processos (id, idpai, idtipoprocesso, inicio, idworkflow) FROM stdin;
 -- Name: processos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('processos_id_seq', 367, true);
+SELECT pg_catalog.setval('processos_id_seq', 515, true);
 
 
 --
@@ -969,24 +974,35 @@ COPY workflow (id, workflow, posto_inicial, posto_final) FROM stdin;
 --
 
 COPY workflow_dados (id, idpostocampo, valor, idprocesso, registro) FROM stdin;
-1146	1	nkj	365	2016-05-08 03:28:13.572913
-1147	13	n	365	2016-05-08 03:28:13.573532
-1148	12		366	2016-05-08 03:28:19.217193
-1149	11	nkjn	366	2016-05-08 03:28:19.217814
-1150	2	k	366	2016-05-08 03:28:19.218263
-1151	3	kjn	366	2016-05-08 03:28:19.218699
-1152	166	k	366	2016-05-08 03:28:19.219133
-1153	12		367	2016-05-08 03:28:21.171762
-1154	11		367	2016-05-08 03:28:21.172343
-1155	2		367	2016-05-08 03:28:21.172805
-1156	3		367	2016-05-08 03:28:21.173241
-1157	166		367	2016-05-08 03:28:21.178279
-1158	4		367	2016-05-08 03:28:27.04607
-1159	10	niun	367	2016-05-08 03:28:27.047284
-1160	5	 k	367	2016-05-08 03:28:32.555163
-1161	6	 jkhbj	367	2016-05-08 03:28:37.996988
-1162	7	sadasdsad	367	2016-05-08 03:29:28.848807
-1163	7	sadasdsad	367	2016-05-08 03:29:36.767664
+1444	1	 precisa saber de angular	508	2016-05-09 02:06:21.75879
+1445	13	frontend	508	2016-05-09 02:06:21.759487
+1446	1	kkk	509	2016-05-09 02:08:34.860389
+1447	13	jjjjj	509	2016-05-09 02:08:34.86105
+1448	12	java	510	2016-05-09 02:15:31.770784
+1449	11	luciano	510	2016-05-09 02:15:31.771488
+1450	2	 jjj	510	2016-05-09 02:15:31.771919
+1451	3	lll	510	2016-05-09 02:15:31.772368
+1452	166	mazza	510	2016-05-09 02:15:31.773235
+1453	4	pl	510	2016-05-09 02:18:38.94638
+1454	10	nota 7	510	2016-05-09 02:18:38.947575
+1455	5	paffi	510	2016-05-09 02:18:50.225232
+1456	1	novo processo defront	511	2016-05-09 02:19:25.15714
+1457	13	front aannc	511	2016-05-09 02:19:25.157762
+1458	1	precisa saber de angular	512	2016-05-09 02:19:40.297411
+1459	13	frontend	512	2016-05-09 02:19:40.29799
+1460	1	novo processo defront	513	2016-05-09 02:19:42.072983
+1461	13	front aannc	513	2016-05-09 02:19:42.073563
+1462	1	novo processo defront	514	2016-05-09 02:20:06.696037
+1463	13	front aannc	514	2016-05-09 02:20:06.696631
+1464	12	tecn	515	2016-05-09 02:20:54.371395
+1465	11	nom	515	2016-05-09 02:20:54.372036
+1466	2	gitb	515	2016-05-09 02:20:54.372486
+1467	3	cvvc	515	2016-05-09 02:20:54.372939
+1468	166	 mazza	515	2016-05-09 02:20:54.373395
+1469	4	sr +	515	2016-05-09 02:21:04.785101
+1470	10	9	515	2016-05-09 02:21:04.786215
+1471	4	sr +	515	2016-05-09 02:21:19.23956
+1472	10	9	515	2016-05-09 02:21:19.240847
 \.
 
 
@@ -994,7 +1010,7 @@ COPY workflow_dados (id, idpostocampo, valor, idprocesso, registro) FROM stdin;
 -- Name: workflow_dados_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('workflow_dados_id_seq', 1163, true);
+SELECT pg_catalog.setval('workflow_dados_id_seq', 1472, true);
 
 
 --
@@ -1039,14 +1055,23 @@ SELECT pg_catalog.setval('workflow_postos_id_seq', 279, true);
 --
 
 COPY workflow_tramitacao (id, idprocesso, idworkflowposto, inicio, fim) FROM stdin;
-473	365	1	2016-05-08 03:28:13.574355	2016-05-08 03:28:13.574355
-474	365	2	2016-05-08 03:28:13.584812	\N
-475	367	3	2016-05-08 03:28:21.179237	2016-05-08 03:28:27.08659
-476	367	4	2016-05-08 03:28:27.048184	2016-05-08 03:28:32.627251
-477	367	5	2016-05-08 03:28:32.572658	2016-05-08 03:28:38.01764
-479	367	8	2016-05-08 03:29:28.850384	\N
-480	367	8	2016-05-08 03:29:36.769287	\N
-478	367	6	2016-05-08 03:28:37.998522	2016-05-08 03:29:36.809281
+751	508	1	2016-05-09 02:06:21.760369	2016-05-09 02:06:21.760369
+752	508	2	2016-05-09 02:06:21.770502	\N
+753	509	1	2016-05-09 02:08:34.861863	2016-05-09 02:08:34.861863
+754	509	2	2016-05-09 02:08:34.871946	\N
+755	510	3	2016-05-09 02:15:31.774084	2016-05-09 02:18:38.965108
+757	510	5	2016-05-09 02:18:50.226688	\N
+756	510	4	2016-05-09 02:18:38.948415	2016-05-09 02:18:50.243982
+758	511	1	2016-05-09 02:19:25.158606	2016-05-09 02:19:25.158606
+759	511	2	2016-05-09 02:19:25.16826	\N
+760	512	1	2016-05-09 02:19:40.299327	2016-05-09 02:19:40.299327
+761	512	2	2016-05-09 02:19:40.31026	\N
+762	513	1	2016-05-09 02:19:42.074453	2016-05-09 02:19:42.074453
+763	513	2	2016-05-09 02:19:42.089816	\N
+764	514	1	2016-05-09 02:20:06.697403	2016-05-09 02:20:06.697403
+765	515	3	2016-05-09 02:20:54.374203	\N
+766	515	4	2016-05-09 02:21:04.78704	\N
+767	515	4	2016-05-09 02:21:19.241636	\N
 \.
 
 
@@ -1054,7 +1079,7 @@ COPY workflow_tramitacao (id, idprocesso, idworkflowposto, inicio, fim) FROM std
 -- Name: workflow_tramitacao_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('workflow_tramitacao_id_seq', 480, true);
+SELECT pg_catalog.setval('workflow_tramitacao_id_seq', 767, true);
 
 
 --
