@@ -4,7 +4,7 @@
 <?php 
 if ($_POST["processar"]==1)
 {
-	 
+	// TODO exibir titulo da pagina
 	foreach ($_POST["idcampoposto"] as $key => $result)
 	{
 		$array[$key][idpostocampo]  = $key;		
