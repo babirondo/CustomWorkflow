@@ -4,7 +4,7 @@ $form = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/getPosto/Lista/".$_GET[
 echo "<tr>";
 	echo "<TD>Processo</td>"; 
 foreach ($form[TITULO] as $idcampo => $linha){
-	echo "<TD>$idcampo ". $linha ."</td>"; 
+	echo "<TD title='$idcampo'> ". $linha ."</td>"; 
 }
 echo "<tr>";
 
