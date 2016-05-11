@@ -37,7 +37,10 @@ if ($_GET["idworkflow"] > 0){
 					<table border=0 width=100%>
 						<tr>
 							<td>cabecalho</td>
-							<td align=right><a href='logout.php'>Logout</a></td>
+							<td align=right>
+                                                            Usuário Logado: <?=$_SESSION["idusuariologado"];?><BR>
+                                                            <a href='logout.php'>Logout</a>
+                                                        </td>
 						</tr>
 					</table>
 				</td>
