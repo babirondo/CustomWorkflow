@@ -32,8 +32,13 @@ if ($_POST["processar"]==1)
             $array[processo][valor]  = $_POST["processo"];	
             $array[processo][acao]  = $_POST["finalizar"];
             $array[processo][idworkflowtramitacao_original]  = $_POST["H"];
-
+            
+            // salvando dados
             $registering = CallAPI("POST", $SERVER_API."Registrar/".$_GET["idworkflow"]."/".$_GET["idposto"] , json_encode( $array) );
+
+            // TODO na hora que der pra fazer multiplos avaliadores pela base, tirar essa gambiarra
+          //  if ($SYS_multiplos_avaliadores[$_GET["idposto"]] > 0)
+           //     $registering = CallAPI("POST", $SERVER_API."Registrar/".$_GET["idworkflow"]."/".$_GET["idposto"] , json_encode( $array) );
 	//var_dump($registering);
 
             if ($registering["resultado"] == "SUCESSO"){
@@ -46,10 +51,16 @@ if ($_POST["processar"]==1)
         if (!is_array($msg_erro))
              // só carrega os dados se não houve erro de validacao
             $form = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/".(($_GET["processo"])?$_GET["processo"]:"0")."/getPosto/".$_GET["idposto"] );
-        
+
             echo "<input type=hidden name=processo value='".$_REQUEST["processo"]."' >";
             echo "<input type=hidden name=H value='".$_REQUEST["H"]."' >";
 
+            echo "<tr>";
+                echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>"; 
+            echo "</tr>";
+
+
+            
             foreach ($form[FETCH_CAMPO] as $linha){
                     $css=null;
                     $exibir_erro=null;

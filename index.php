@@ -1,6 +1,4 @@
 <?php
- 
-
 session_start();
 
 if (!$_SESSION["idusuariologado"])
@@ -17,6 +15,8 @@ require_once("classes/diversos.php");
  // testando commit do mac 2
 
 $retorno = CallAPI("get", $SERVER_API."getWorkflows/");
+
+
 if ($_GET["idworkflow"] > 0){
 	$array=null;
 	$array[idusuario] = $_SESSION["idusuariologado"]; 

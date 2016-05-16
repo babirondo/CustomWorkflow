@@ -3,14 +3,15 @@
 if ($_GET["idposto"] != null){
     if ($_GET["amr"]==1){
         // assumir idprocesso no posto
-
         
         $array[$SYS_DEPARA_CAMPOS["Responsável"]][valor]  = $_SESSION["idusuariologado"];		
-        $array[$SYS_DEPARA_CAMPOS["Responsável"]][idworkflowdado]  = $_GET["wkdaas"] ;
-
+        $array[$SYS_DEPARA_CAMPOS["Responsável"]]["idworkflowdado"]  = $_GET["wkdaas"] ;
         $array[processo][valor]  = $_GET["processo"];	
-
-        $salvando_assumir = CallAPI("POST", $SERVER_API."Registrar/".$_GET["idworkflow"]."/".$_GET["idposto"] , json_encode( $array) );
+        
+        if ($_GET["wkdaas"])
+            $desassociar  = CallAPI("POST", $SERVER_API."Posto/Desassociar/".$_GET["idposto"] , json_encode( $array) );
+        else
+            $associar  = CallAPI("POST", $SERVER_API."Posto/Associar/".$_GET["idposto"] , json_encode( $array) );
     }
     
     switch ($_GET["lista"]){
