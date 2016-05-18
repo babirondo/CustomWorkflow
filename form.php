@@ -1,10 +1,10 @@
-<form action="<?=$PHP_SELF;?>" method=post>
+<form action="<?=$PHP_SELF;?>" method=post enctype="multipart/form-data">
 	<input type=hidden name=processar value=1>
 	
 <?php  
 if ($_POST["processar"]==1)
 {
-//        echo "<pre>"; var_dump($_POST);echo "</pre>";
+       // echo "<pre>"; var_dump($_FILES);echo "</pre>";
 
         // validando campos antes de enviar
         $msg_erro = null;
@@ -18,10 +18,23 @@ if ($_POST["processar"]==1)
                 }
             }
         }
-     //   echo "<pre>"; var_dump($Erro);echo "</pre>";
+        if (is_array($_FILES["idcampoposto"]))
+        {
+            foreach ( $_FILES["idcampoposto"] as $idcampo => $valor){
+
+                //$Restore[$idcampo][valor_postado] = $valor;
+                IF ($_FILES["obrigatorio"][$idcampo] == 1){
+
+                    IF ( empty( $_FILES["idcampoposto"][$idcampo])  ) {
+                        $Erro[$idcampo][erro] = "Campo Obrigatório";
+                    }
+                }
+            }
+        }
+   
         if (!is_array($Erro))
         {
-            // TODO exibir titulo da pagina
+                        
             foreach ($_POST["idcampoposto"] as $key => $result)
             {
                     $array[$key][idpostocampo]  = $key;		
@@ -29,9 +42,23 @@ if ($_POST["processar"]==1)
 
                     $array[$key][idworkflowdado]  = $_POST["idworkflowdado"][$key];
             }
+            if (is_array($_FILES["idcampoposto"]))
+            {
+
+                foreach ($_FILES["idcampoposto"]["tmp_name"] as $key => $result)
+                {
+                        $array[$key][idpostocampo]  = $key;		
+                        $array[$key][valor]  = base64_encode(addslashes(fread(fopen($result, "r"), filesize($result))))  ;		
+
+                        $array[$key][idworkflowdado]  = $_POST["idworkflowdado"][$key];
+                }
+            }    
+                        
             $array[processo][valor]  = $_POST["processo"];	
             $array[processo][acao]  = $_POST["finalizar"];
             $array[processo][idworkflowtramitacao_original]  = $_POST["H"];
+            
+           // echo "<pre>"; var_dump($array);echo "</pre>";
             
             // salvando dados
             $registering = CallAPI("POST", $SERVER_API."Registrar/".$_GET["idworkflow"]."/".$_GET["idposto"] , json_encode( $array) );
@@ -76,7 +103,7 @@ if ($_POST["processar"]==1)
 
 
                     echo "<tr $css>
-                            <TD>".(($linha["obrigatorio"])?"<font color=#ff0000>*</font>":""). $linha["campo"]."</td>
+                            <TD> ".$linha["idcampo"]." ".(($linha["obrigatorio"])?"<font color=#ff0000>*</font>":""). $linha["campo"]."</td>
                             <TD> ";
 
 
@@ -86,6 +113,11 @@ if ($_POST["processar"]==1)
                         case("textarea"):
                             echo "<textarea rows='". $linha["txtarea_rows"]."' cols='". $linha["txtarea_cols"]."' name=idcampoposto[". $linha["idcampo"]."]>". $linha["valor"]."</textarea>";
                         break;
+
+                        case("file"):
+                            echo "<input type=file name=idcampoposto[". $linha["idcampo"]."]> </textarea>";
+                        break;
+
                         default:
                             echo " <input type=text size='". $linha["maxlenght"]."' name=idcampoposto[". $linha["idcampo"]."] value='". $linha["valor"]."'>";
                     }

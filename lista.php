@@ -15,7 +15,7 @@ echo "</tr>";
 echo "<tr>";
 	echo "<TD>Processo</td>"; 
 foreach ($form[TITULO] as $idcampo => $linha){
-	echo "<TD title='$idcampo'> ". $linha ."</td>"; 
+	echo "<TD title='$idcampo'> $idcampo ". $linha ."</td>"; 
 }
 echo "</tr>";
 
