@@ -42,11 +42,13 @@ if ($_POST["processar"]==1)
 
                     $array[$key][idworkflowdado]  = $_POST["idworkflowdado"][$key];
             }
-            if (is_array($_FILES["idcampoposto"]))
-            {
-
+            
+            if (is_array($_FILES["idcampoposto"]["tmp_name"]))
+            { 
                 foreach ($_FILES["idcampoposto"]["tmp_name"] as $key => $result)
                 {
+                        if (!$result) continue;
+                        
                         $array[$key][idpostocampo]  = $key;		
                         $array[$key][valor]  = base64_encode(addslashes(fread(fopen($result, "r"), filesize($result))))  ;		
 
