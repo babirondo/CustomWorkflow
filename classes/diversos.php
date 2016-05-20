@@ -36,7 +36,7 @@ function CallAPI($method, $url, $data = false)
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
 	$result = curl_exec($curl);
-
+echo $_POST["logar"];
 	curl_close($curl);
 
 	return  json_decode( $result , true);

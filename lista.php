@@ -40,7 +40,8 @@ foreach ($form[FETCH] as $processo => $dados){
     }
 
     if (is_array($form[ACOES] )){
-        if ($dados[ $SYS_DEPARA_CAMPOS["Respons√°vel"] ] == $_SESSION["idusuariologado"] || !$dados[ $SYS_DEPARA_CAMPOS["Respons√°vel"] ]){
+        if ($dados[ $SYS_DEPARA_CAMPOS["Respons·vel"] ] == $_SESSION["idusuariologado"] 
+        || !$dados[ $SYS_DEPARA_CAMPOS["Respons·vel"] ]){
             foreach ($form[ACOES] as $acao){
                 echo "<TD>
     <a href='$PHP_SELF?amr=". $acao[assumir] ."&wkdaas=".$dados[idworkflowdado_assumir]."&processo=$processo&H=". $dados[idworkflowtramitacao] ."&idworkflow=". $acao[idworkflow] ."&lista=". $acao[lista] ."&idposto=".$acao[ir]."'>";

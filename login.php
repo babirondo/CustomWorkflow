@@ -6,8 +6,7 @@ error_reporting(E_ALL ^ E_NOTICE );
 require_once("classes/globais.php");
 require_once("classes/diversos.php");
  // testando commit do mac 2
-
-
+ 
 if ( $_POST["logar"] == 1){
 	$array[login] = $_POST["login"];
 	$array[senha] = $_POST["senha"];
