@@ -20,10 +20,10 @@ foreach ($form[TITULO] as $idcampo => $linha){
 echo "</tr>";
 
 	
-foreach ($form[FETCH] as $processo => $dados){
+foreach ($form[FETCH]  as $processo => $dados){
     echo "<Tr>"; 
-    echo "<TD>". $processo ."</td>"; 
-    foreach ($form[TITULO] as $campo => $linha){
+    echo "<TD>". $processo .count($form[FETCH]  )."</td>"; 
+    foreach ($form[TITULO]  as $campo => $linha){
         
         
         // Resolver o campo responsável ou imprimir direto da api

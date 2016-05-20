@@ -2,7 +2,7 @@
 function CallAPI($method, $url, $data = false)
 {
 	$curl = curl_init();
-
+       //  exit;       
 	switch ($method)
 	{
 		case "POST":
@@ -22,8 +22,8 @@ function CallAPI($method, $url, $data = false)
 		default:
 			echo " <BR>   $url  ";
 				
-			if ($data)
-				$url = sprintf("%s?%s", $url, http_build_query($data));
+                        if ($data)
+                                $url = sprintf("%s?%s", $url, http_build_query($data));
 	}
 
 	// Optional Authentication:
@@ -36,7 +36,7 @@ function CallAPI($method, $url, $data = false)
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
 	$result = curl_exec($curl);
-echo $_POST["logar"];
+                
 	curl_close($curl);
 
 	return  json_decode( $result , true);

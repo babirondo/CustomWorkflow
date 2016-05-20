@@ -6,6 +6,7 @@ if ($_GET["idposto"] != null){
         
         $array[$SYS_DEPARA_CAMPOS["Responsável"]][valor]  = $_SESSION["idusuariologado"];		
         $array[$SYS_DEPARA_CAMPOS["Responsável"]]["idworkflowdado"]  = $_GET["wkdaas"] ;
+        $array[$SYS_DEPARA_CAMPOS["Responsável"]]["idtramitacao"]  = $_GET["H"] ;
         $array[processo][valor]  = $_GET["processo"];	
         
         if ($_GET["wkdaas"])

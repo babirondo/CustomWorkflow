@@ -12,7 +12,7 @@ if ( $_POST["logar"] == 1){
 	$array[senha] = $_POST["senha"];
 	
 	$auth = CallAPI("POST", $SERVER_API."Autenticar/"  , json_encode( $array) );
-
+ 
 	if ($auth["resultado"] == "SUCESSO"){
 		
 		$_SESSION['idusuariologado']= $auth["id"];
