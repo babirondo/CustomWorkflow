@@ -40,12 +40,12 @@ foreach ($form[FETCH]  as $processo => $dados){
     }
 
     if (is_array($form[ACOES] )){
-        if ($dados[ $SYS_DEPARA_CAMPOS["Responsável"] ] == $_SESSION["idusuariologado"] 
+        if ($dados[ $SYS_DEPARA_CAMPOS["Responsável"]."-ID" ] == $_SESSION["idusuariologado"] 
         || !$dados[ $SYS_DEPARA_CAMPOS["Responsável"] ]){
             foreach ($form[ACOES] as $acao){
                 echo "<TD>
-    <a href='$PHP_SELF?amr=". $acao[assumir] ."&wkdaas=".$dados[idworkflowdado_assumir]."&processo=$processo&H=". $dados[idworkflowtramitacao] ."&idworkflow=". $acao[idworkflow] ."&lista=". $acao[lista] ."&idposto=".$acao[ir]."'>";
-                echo  (($acao[assumir]==1 & $dados[idworkflowdado_assumir]>0)?"Desassumir":$acao[acao]) ;
+    <a href='$PHP_SELF?amr=". $acao[assumir] ."&wkdaas=".$dados[tramitacao_idusuario]."&idposto_anterior=".$_GET["idposto"]."&processo=$processo&H=". $dados[idworkflowtramitacao] ."&idworkflow=". $acao[idworkflow] ."&lista=". $acao[lista] ."&idposto=".$acao[ir]."'>";
+                echo  (($acao[assumir]==1 & $dados[tramitacao_idusuario]>0)?"Desassumir":$acao[acao]) ;
                 echo  "</a>
                    </td>";
             }
