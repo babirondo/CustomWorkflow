@@ -1,6 +1,8 @@
 <?php
-
+    // configuracao de ambiente
     $usar = "windows";
+    $usar = "mac";
+
 if ($usar == "windows"){
   //windows
     $SERVER_API = "127.0.0.1:8080/CustomWorkflowAPI/";  
