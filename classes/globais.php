@@ -1,7 +1,7 @@
 <?php
     // configuracao de ambiente
     $usar = "windows";
-    $usar = "mac";
+    $usar = "ddd";
 
 if ($usar == "windows"){
   //windows
