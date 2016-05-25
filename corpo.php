@@ -70,7 +70,7 @@ if ($_GET["idposto"] != null){
                 // TODO na hora que der pra fazer multiplos avaliadores pela base, tirar essa gambiarra
               //  if ($SYS_multiplos_avaliadores[$_GET["idposto"]] > 0)
                //     $registering = CallAPI("POST", $SERVER_API."Registrar/".$_GET["idworkflow"]."/".$_GET["idposto"] , json_encode( $array) );
-            //var_dump($registering);
+                //var_dump($registering);
 
                 if ($registering["resultado"] == "SUCESSO"){
                         echo " <font color='#ff0000'>Dados registrados com sucesso</font> ";
@@ -83,7 +83,7 @@ if ($_GET["idposto"] != null){
                 
             }
 
-            echo "<BR> <font color='#ffaa00'><pre>".$registering["DEBUG"]."</pre></font> ";
+            echo "<BR>  <pre>".$registering["DEBUG"]."</pre>";
     }    
     if ($_GET["amr"]==1){
         // assumir idprocesso no posto
