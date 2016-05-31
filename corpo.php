@@ -101,6 +101,10 @@ if ($_GET["idposto"] != null){
     }
     
     switch ($_GET["lista"]){
+        case("R"):
+            require_once("relatorios.php");
+        break;
+
         case("L"):
             require_once("lista.php");
         break;
