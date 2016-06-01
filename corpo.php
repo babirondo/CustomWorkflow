@@ -1,4 +1,4 @@
-<table border=1>
+<table  width=100% border=1>
 <?php
 if ($_GET["idposto"] != null){
     

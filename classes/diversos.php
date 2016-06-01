@@ -2,6 +2,7 @@
 function CallAPI($method, $url, $data = false)
 {
 	$curl = curl_init();
+	$verbose = 0;
 	$verbose = 1;
        //  exit;
 	switch ($method)

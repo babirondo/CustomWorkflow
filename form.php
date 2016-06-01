@@ -40,7 +40,7 @@
                     switch ($linha["inputtype"])
                     {
                         case("textarea"):
-                            echo "<textarea rows='". $linha["txtarea_rows"]."' cols='". $linha["txtarea_cols"]."' name=idcampoposto[". $linha["idcampo"]."]>". $linha["valor"]."</textarea>";
+                            echo "<textarea rows='". $linha["txtarea_rows"]."' cols='". $linha["txtarea_cols"]."' name=idcampoposto[". $linha["idcampo"]."]>". $linha["valor"]."</textarea> ".$linha["dica_preenchimento"];
                         break;
 
                         case("file"):
