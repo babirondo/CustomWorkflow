@@ -1,7 +1,7 @@
 <form action="<?=$PHP_SELF;?>" method=post enctype="multipart/form-data">
 	<input type=hidden name=processar value=1>
-	
-<?php  
+
+<?php
 
         if (!is_array($msg_erro))
              // só carrega os dados se não houve erro de validacao
@@ -12,11 +12,11 @@
             echo "<input type=hidden name=H value='".$_REQUEST["H"]."' >";
 
             echo "<tr>";
-                echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>"; 
+                echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
             echo "</tr>";
 
 
-            
+
             foreach ($form[FETCH_CAMPO] as $linha){
                     $css=null;
                     $exibir_erro=null;
@@ -28,7 +28,7 @@
                     if (is_array($Erro)){
                         $linha["valor"] = $Restore[$linha["idcampo"]][valor_postado];
                     }
-                    
+
 
 
                     echo "<tr $css>
@@ -36,6 +36,7 @@
                             <TD> ";
 
 
+										$linha["valor"] = (($linha["valor"])?$linha["valor"]:$linha["valor_default"]) ;
 
                     switch ($linha["inputtype"])
                     {
@@ -47,6 +48,14 @@
                             echo "<input type=file name=idcampoposto[". $linha["idcampo"]."]> </textarea>";
                         break;
 
+                        case("list"):
+                            echo "<select multiple  name=idcampoposto[". $linha["idcampo"]."][]>";
+													  foreach ( $linha["valor_default"] as $idtecnologia  => $val_tecnologia)
+														 	  echo "<option ".(( in_array($idtecnologia, $linha["valor"]) )?"selected":"")." value='$idtecnologia'>$val_tecnologia</option>";
+
+														echo "		 </select>";
+                        break;
+
                         default:
                             echo " <input type=text size='". $linha["maxlenght"]."' name=idcampoposto[". $linha["idcampo"]."] value='". $linha["valor"]."'>";
                     }
@@ -55,7 +64,8 @@
                             </td>
                        </tr>	 ";
                     echo "<input type=hidden name=idworkflowdado[". $linha["idcampo"]."] value='". $linha["idworkflowdado"]."'>";
-                    echo "<input type=hidden name=obrigatorio[". $linha["idcampo"]."] value='". $linha["obrigatorio"]."'>";
+										echo "<input type=hidden name=obrigatorio[". $linha["idcampo"]."] value='". $linha["obrigatorio"]."'>";
+										echo "<input type=hidden name=inputtype[". $linha["idcampo"]."]  value='". $linha["inputtype"]."'>";
             }
 
                 echo "
@@ -64,7 +74,7 @@
                         <tr>
 				<td><input type=button   value=' <<< Voltar'> </td> ";
 		echo "          <td><input type=submit name=finalizar value='".$SYS_DEPARA_CAMPOS["bt_handover"]."'> </td> ";
-                
+
                 if ($form[DADOS_POSTO][starter] != 1)
                     echo "     <td><input type=submit name=finalizar value='Salvar'> </td>";
 

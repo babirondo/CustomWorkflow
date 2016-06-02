@@ -1,24 +1,45 @@
 <table  width=100% border=1>
 <?php
 if ($_GET["idposto"] != null){
-    
+
      // salvando dados do form
     if ($_POST["processar"]==1)
     {
-          
+
     // echo "<pre>"; var_dump($_FILES);echo "</pre>";
 
             // validando campos antes de enviar
             $msg_erro = null;
-            foreach ( $_POST["idcampoposto"] as $idcampo => $valor){
 
-                $Restore[$idcampo][valor_postado] = $valor;
-                IF ($_POST["obrigatorio"][$idcampo] == 1){
 
-                    IF ( empty( $_POST["idcampoposto"][$idcampo])  ) {
-                        $Erro[$idcampo][erro] = "Campo Obrigatório";
+            foreach ( $_POST["obrigatorio"] as $idcampo => $valor){
+               $Restore[$idcampo][valor_postado] = $_POST["idcampoposto"][$idcampo];
+               if ($valor == 1)
+               {
+                  // todos obrigatorios
+
+
+
+                    switch ($_POST["inputtype"][$idcampo])
+                    {
+
+
+                      case("list"):
+                        if (!is_array($_POST["idcampoposto"][$idcampo]))
+                        {
+                            $Erro[$idcampo][erro] = "Campo Array Obrigatório";
+                        }
+                      break;
+
+                      default:
+                      IF ( empty( $_POST["idcampoposto"][$idcampo])  ) {
+                          $Erro[$idcampo][erro] = "Campo Obrigatório";
+                      }
                     }
-                }
+
+
+              }
+
             }
             if (is_array($_FILES["idcampoposto"]))
             {
@@ -39,26 +60,26 @@ if ($_GET["idposto"] != null){
 
                 foreach ($_POST["idcampoposto"] as $key => $result)
                 {
-                        $array[$key][idpostocampo]  = $key;		
-                        $array[$key][valor]  = $result;		
+                        $array[$key][idpostocampo]  = $key;
+                        $array[$key][valor]  = $result;
 
                         $array[$key][idworkflowdado]  = $_POST["idworkflowdado"][$key];
                 }
 
                 if (is_array($_FILES["idcampoposto"]["tmp_name"]))
-                { 
+                {
                     foreach ($_FILES["idcampoposto"]["tmp_name"] as $key => $result)
                     {
                             if (!$result) continue;
 
-                            $array[$key][idpostocampo]  = $key;		
-                            $array[$key][valor]  = base64_encode(addslashes(fread(fopen($result, "r"), filesize($result))))  ;		
+                            $array[$key][idpostocampo]  = $key;
+                            $array[$key][valor]  = base64_encode(addslashes(fread(fopen($result, "r"), filesize($result))))  ;
 
                             $array[$key][idworkflowdado]  = $_POST["idworkflowdado"][$key];
                     }
-                }    
+                }
 
-                $array[processo][valor]  = $_POST["processo"];	
+                $array[processo][valor]  = $_POST["processo"];
                 $array[processo][acao]  = $_POST["finalizar"];
                 $array[processo][idworkflowtramitacao_original]  = $_POST["H"];
 
@@ -77,29 +98,35 @@ if ($_GET["idposto"] != null){
                 }
                 if ($_POST["idposto_anterior"]>0)
                 {
-                    $_GET["idposto"] = $_POST["idposto_anterior"];    
+                    $_GET["idposto"] = $_POST["idposto_anterior"];
                     $_GET["lista"]="L";
                 }
-                
+
             }
 
             echo "<BR>  <pre>".$registering["DEBUG"]."</pre>";
-    }    
+    }
+
+    echo "<pre>";
+    var_dump($Restore);
+    echo "</pre>";
+
+
     if ($_GET["amr"]==1){
         // assumir idprocesso no posto
-        
-        $array[$SYS_DEPARA_CAMPOS["Respons�vel"]][valor]  = $_SESSION["idusuariologado"];		
-        $array[$SYS_DEPARA_CAMPOS["Respons�vel"]]["idworkflowdado"]  = $_GET["wkdaas"] ;
-        $array[$SYS_DEPARA_CAMPOS["Respons�vel"]]["idtramitacao"]  = $_GET["H"] ;
-        $array[processo][valor]  = $_GET["processo"];	
-        
+
+        $array[$SYS_DEPARA_CAMPOS["Responsável"]][valor]  = $_SESSION["idusuariologado"];
+        $array[$SYS_DEPARA_CAMPOS["Responsável"]]["idworkflowdado"]  = $_GET["wkdaas"] ;
+        $array[$SYS_DEPARA_CAMPOS["Responsável"]]["idtramitacao"]  = $_GET["H"] ;
+        $array[processo][valor]  = $_GET["processo"];
+
         if ($_GET["wkdaas"])
             $desassociar  = CallAPI("POST", $SERVER_API."Posto/Desassociar/".$_GET["idposto"] , json_encode( $array) );
         else
             $associar  = CallAPI("POST", $SERVER_API."Posto/Associar/".$_GET["idposto"] , json_encode( $array) );
-        
+
     }
-    
+
     switch ($_GET["lista"]){
         case("R"):
             require_once("relatorios.php");
@@ -116,4 +143,4 @@ if ($_GET["idposto"] != null){
 }
 
 ?>
-</table> 
+</table>
