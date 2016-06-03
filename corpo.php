@@ -60,8 +60,21 @@ if ($_GET["idposto"] != null){
 
                 foreach ($_POST["idcampoposto"] as $key => $result)
                 {
+                    
+                    switch ($_POST["inputtype"][$key])
+                    {
+                      case("list"):
+                        $array[$key][idpostocampo]  = $key;
+                        $array[$key][valor]  = implode(",",$result);
+                      break;
+
+                      default:
                         $array[$key][idpostocampo]  = $key;
                         $array[$key][valor]  = $result;
+                    }
+
+                    
+                       
 
                         $array[$key][idworkflowdado]  = $_POST["idworkflowdado"][$key];
                 }
@@ -83,7 +96,7 @@ if ($_GET["idposto"] != null){
                 $array[processo][acao]  = $_POST["finalizar"];
                 $array[processo][idworkflowtramitacao_original]  = $_POST["H"];
 
-               // echo "<pre>"; var_dump($array);echo "</pre>";
+            //   echo "<pre>"; var_dump($array);echo "</pre>";
 
                 // salvando dados
                 $registering = CallAPI("POST", $SERVER_API."Registrar/".$_GET["idworkflow"]."/".$_GET["idposto"] , json_encode( $array) );
@@ -106,11 +119,6 @@ if ($_GET["idposto"] != null){
 
             echo "<BR>  <pre>".$registering["DEBUG"]."</pre>";
     }
-
-    echo "<pre>";
-    var_dump($Restore);
-    echo "</pre>";
-
 
     if ($_GET["amr"]==1){
         // assumir idprocesso no posto

@@ -1,8 +1,6 @@
 <form action="<?=$PHP_SELF;?>" method=post enctype="multipart/form-data">
 	<input type=hidden name=processar value=1>
-
 <?php
-
         if (!is_array($msg_erro))
              // só carrega os dados se não houve erro de validacao
             $form = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/".(($_GET["processo"])?$_GET["processo"]:"0")."/getPosto/".$_GET["idposto"] );
@@ -14,8 +12,6 @@
             echo "<tr>";
                 echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
             echo "</tr>";
-
-
 
             foreach ($form[FETCH_CAMPO] as $linha){
                     $css=null;
@@ -47,13 +43,22 @@
                         case("file"):
                             echo "<input type=file name=idcampoposto[". $linha["idcampo"]."]> </textarea>";
                         break;
+                    
+                    
+                        case("select"):
+                            echo "<select    name=idcampoposto[". $linha["idcampo"]."] >";
+                            foreach ( $linha["valor_default"] as $idtecnologia  => $val_tecnologia)
+                                echo "<option ".((  $idtecnologia == $linha["valor"]  )?"selected":"")." value='$idtecnologia'>$val_tecnologia</option>";
+
+                            echo " </select>";
+                        break;
 
                         case("list"):
                             echo "<select multiple  name=idcampoposto[". $linha["idcampo"]."][]>";
-													  foreach ( $linha["valor_default"] as $idtecnologia  => $val_tecnologia)
-														 	  echo "<option ".(( in_array($idtecnologia, $linha["valor"]) )?"selected":"")." value='$idtecnologia'>$val_tecnologia</option>";
+                            foreach ( $linha["valor_default"] as $idtecnologia  => $val_tecnologia)
+                                echo "<option ".(( in_array($idtecnologia, $linha["valor"]) )?"selected":"")." value='$idtecnologia'>$val_tecnologia</option>";
 
-														echo "		 </select>";
+                            echo " </select>";
                         break;
 
                         default:
@@ -64,8 +69,8 @@
                             </td>
                        </tr>	 ";
                     echo "<input type=hidden name=idworkflowdado[". $linha["idcampo"]."] value='". $linha["idworkflowdado"]."'>";
-										echo "<input type=hidden name=obrigatorio[". $linha["idcampo"]."] value='". $linha["obrigatorio"]."'>";
-										echo "<input type=hidden name=inputtype[". $linha["idcampo"]."]  value='". $linha["inputtype"]."'>";
+                    echo "<input type=hidden name=obrigatorio[". $linha["idcampo"]."] value='". $linha["obrigatorio"]."'>";
+                    echo "<input type=hidden name=inputtype[". $linha["idcampo"]."]  value='". $linha["inputtype"]."'>";
             }
 
                 echo "
