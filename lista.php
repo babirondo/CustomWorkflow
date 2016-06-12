@@ -1,7 +1,7 @@
 <?php
 $usuarios = CallAPI("get", $SERVER_API."Usuarios/Posto/".$_GET["idposto"] );
 
-$form = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/getPosto/Lista/".$_GET["idposto"] );
+$form = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPosto/Lista/".$_GET["idposto"], json_encode($_POST["filtro"]) );
 
 echo "<tr>";
 	echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
@@ -28,9 +28,43 @@ if (is_array($form[FUNCOES_POSTO]))
 
 if (is_array($form[TITULO]))
 {
-
+//	  echo "<pre>";var_dump($_POST["filtro"]);
     echo "<tr>";
-        echo "<TD colspan=100>Filtros</td>";
+        echo "<TD colspan=100>
+								<table >
+									<tr>
+									<form action='$PHP_SELF?idworkflow=".$_GET["idworkflow"]."&lista=".$_GET["lista"]."&idposto=".$_GET["idposto"]."' method=post>";
+
+								foreach ($form[FILTROS_POSTO] as $idfiltro => $filter){
+				        	echo "<TD>  ";
+									echo $filter[FILTRO];
+
+
+									switch ( $filter[TIPO] )
+									{
+										case("COMBO"):
+											echo "<SELECT name=filtro[$idfiltro]>";
+											  echo "<option value='-1'>TODOS</option>";
+											foreach ($filter[ITENS] as $option){
+												echo "<option ".(( $_POST[filtro][$idfiltro] == $option)? "SELECTED":"").">$option</option>";
+											}
+											echo "</select>";
+										BREAK;
+
+										default:
+											echo "Tipo de Filtro Não existente: ".$filter[TIPO];
+									}
+								  echo "</td>";
+
+				    		}
+
+								echo "<td> <input type=submit value='Filtrar'> </td>
+								</form>";
+
+								echo "
+							   	</tr>
+								</table>
+				      </td>";
     echo "</tr>";
 
 
@@ -44,7 +78,7 @@ if (is_array($form[TITULO]))
 
     foreach ($form[FETCH]  as $processo => $dados){
         echo "<Tr>";
-        echo "<TD> <a href='processos.php?idprocesso=".$processo."' target=__blank >". $processo ."</a>  </td>"; 
+        echo "<TD> <a href='processos.php?idprocesso=".$processo."' target=__blank >". $processo ."</a>  </td>";
         foreach ($form[TITULO]  as $campo => $linha){
 
 
