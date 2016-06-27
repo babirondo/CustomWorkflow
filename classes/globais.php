@@ -4,7 +4,7 @@
     $usar = "mac";
 
     $usar_ambiente = "dev";
-    //$usar_ambiente = "prod";
+  //  $usar_ambiente = "prod";
 
 
 
@@ -29,7 +29,7 @@
 
 
 
-$SYS_DEPARA_CAMPOS["Respons�vel"] = -1;
+$SYS_DEPARA_CAMPOS["Responsável"] = -1;
 $SYS_DEPARA_CAMPOS["bt_handover"] = "Salvar e Avancar >";
 
 ?>

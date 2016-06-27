@@ -4,7 +4,7 @@ function CallAPI($method, $url, $data = false)
 	$curl = curl_init();
 	$verbose = 0;
 	$verbose = 1;
-       //  exit;
+
 	switch ($method)
 	{
 		case "POST":
@@ -18,14 +18,14 @@ function CallAPI($method, $url, $data = false)
 			break;
 		case "PUT":
 			curl_setopt($curl, CURLOPT_PUT, 1);
- 			if ($verbose) echo " <BR> curl -H 'Content-Type: application/json' -X POST -d '$data' $url  ";
+if ($verbose) echo " <BR> curl -H 'Content-Type: application/json' -X POST -d '$data' $url  ";
 
 			break;
 		default:
  			if ($verbose) echo " <BR>   $url  ";
 
-                        if ($data)
-                                $url = sprintf("%s?%s", $url, http_build_query($data));
+    if ($data)
+            $url = sprintf("%s?%s", $url, http_build_query($data));
 	}
 
 	// Optional Authentication:
