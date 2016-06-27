@@ -30,9 +30,12 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
 
         $p=0;
         foreach ($exibir as $campo => $valor){
+				 
+
+
           if ($p == 0) echo "<tr>";
           echo "<td>$campo</td>";
-          echo "<td>$valor</td>";
+          echo "<td>".((strlen($valor) > 30 )?substr( $valor,0,30)."...":$valor)."</td>";
           $p++;
           if ($p == 4) {
               echo "</tr>";

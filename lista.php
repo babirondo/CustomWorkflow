@@ -28,6 +28,8 @@ if (is_array($form[FUNCOES_POSTO]))
 
 if (is_array($form[TITULO]))
 {
+
+	/*
 //	  echo "<pre>";var_dump($_POST["filtro"]);
     echo "<tr>";
         echo "<TD colspan=100>
@@ -66,7 +68,7 @@ if (is_array($form[TITULO]))
 								</table>
 				      </td>";
     echo "</tr>";
-
+*/
 
     echo "<tr>";
         echo "<TD>Processo</td>";
@@ -89,6 +91,7 @@ if (is_array($form[TITULO]))
                     $resu = $usuarios["USUARIOS_POSTO"][$_GET["idposto"]][$dados[$campo]];
             }
             $resu = (($resu)?$resu:$dados[$campo]);
+						$resu = ((strlen($resu) > 30 )?substr( $resu,0,30)."...":$resu);
 
             echo "<TD>   $resu  </td>";
 

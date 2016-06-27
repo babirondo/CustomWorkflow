@@ -5,7 +5,7 @@ if (!$_SESSION["idusuariologado"])
 {
 	header("Location: login.php");
 }
-else if ($_SESSION["idusuariologado"] > 0 )  
+else if ($_SESSION["idusuariologado"] > 0 )
 {
 
 error_reporting(E_ALL ^ E_NOTICE );
@@ -19,7 +19,7 @@ $retorno = CallAPI("get", $SERVER_API."getWorkflows/");
 
 if ($_GET["idworkflow"] > 0){
 	$array=null;
-	$array[idusuario] = $_SESSION["idusuariologado"]; 
+	$array[idusuario] = $_SESSION["idusuariologado"];
 	$postos = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPostos/", json_encode( $array));
 	$array=null;
 }
@@ -36,7 +36,7 @@ if ($_GET["idworkflow"] > 0){
 				<td>
 					<table border=0 width=100%>
 						<tr>
-							<td>cabecalho</td>
+								<td>cabecalho  <h1><font color=red> <?=$usar_ambiente;?> </h1></font> </td>
 							<td align=right>
                                                             Usuário Logado: <?=$_SESSION["idusuariologado"];?><BR>
                                                             <a href='logout.php'>Logout</a>
@@ -44,16 +44,16 @@ if ($_GET["idworkflow"] > 0){
 						</tr>
 					</table>
 				</td>
-				  
+
 			</tr>
 			<tr height=5%>
 				<td>
 					<table border=0 width=100% >
 					  <tr>
-					  <?php 
+					  <?php
 					  foreach ($retorno[FETCH] as $linha){
 					  	echo "<TD> <a href='$PHP_SELF?idworkflow=". $linha["idworkflow"]."&idposto=". $linha["postoinicial"]."'>". $linha["workflow"]."</a></td>";
-					  	
+
 					  }
 					  ?>
 					  </tr>
@@ -64,10 +64,10 @@ if ($_GET["idworkflow"] > 0){
 				<td>
 					<table border=0 width=100% >
 					  <tr>
-					  <?php 
+					  <?php
 					  foreach ($postos[FETCH] as $linha){
 					  	echo "<TD> <a href='$PHP_SELF?idworkflow=".$_GET["idworkflow"]."&lista=". $linha["lista"]."&idposto=". $linha["idposto"]."'>". $linha["posto"]."</a></td>";
-					  	
+
 					  }
 					  ?>
 					  </tr>
@@ -77,7 +77,7 @@ if ($_GET["idworkflow"] > 0){
 			<tr >
 				<td><?=require_once("corpo.php")?></td>
 			</tr>
-			 
+
 		</table>
 	</body>
 </html>
