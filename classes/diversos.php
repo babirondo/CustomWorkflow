@@ -1,9 +1,13 @@
 <?php
 function CallAPI($method, $url, $data = false)
 {
+
+	GLOBAL $usar_ambiente;
 	$curl = curl_init();
-	$verbose = 0;
+
 	$verbose = 1;
+	if ($usar_ambiente == "prod")
+		$verbose = 0;
 
 	switch ($method)
 	{
