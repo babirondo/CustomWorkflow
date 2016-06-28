@@ -29,7 +29,7 @@
 
 
 
-$SYS_DEPARA_CAMPOS["Responsável"] = -1;
+$SYS_DEPARA_CAMPOS["Responsavel"] = -1;
 $SYS_DEPARA_CAMPOS["bt_handover"] = "Salvar e Avancar >";
 
 ?>

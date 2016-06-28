@@ -123,9 +123,9 @@ if ($_GET["idposto"] != null){
     if ($_GET["amr"]==1){
         // assumir idprocesso no posto
 
-        $array[$SYS_DEPARA_CAMPOS["Responsável"]][valor]  = $_SESSION["idusuariologado"];
-        $array[$SYS_DEPARA_CAMPOS["Responsável"]]["idworkflowdado"]  = $_GET["wkdaas"] ;
-        $array[$SYS_DEPARA_CAMPOS["Responsável"]]["idtramitacao"]  = $_GET["H"] ;
+        $array[$SYS_DEPARA_CAMPOS["Responsavel"]][valor]  = $_SESSION["idusuariologado"];
+        $array[$SYS_DEPARA_CAMPOS["Responsavel"]]["idworkflowdado"]  = $_GET["wkdaas"] ;
+        $array[$SYS_DEPARA_CAMPOS["Responsavel"]]["idtramitacao"]  = $_GET["H"] ;
         $array[processo][valor]  = $_GET["processo"];
 
         if ($_GET["wkdaas"])

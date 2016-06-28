@@ -99,8 +99,8 @@ if (is_array($form[TITULO]))
         }
 
         if (is_array($form[ACOES] )){
-            if ($dados[ $SYS_DEPARA_CAMPOS["Responsável"]."-ID" ] == $_SESSION["idusuariologado"]
-            || !$dados[ $SYS_DEPARA_CAMPOS["Responsável"] ]){
+            if ($dados[ $SYS_DEPARA_CAMPOS["Responsavel"]."-ID" ] == $_SESSION["idusuariologado"]
+            || !$dados[ $SYS_DEPARA_CAMPOS["Responsavel"] ]){
                 foreach ($form[ACOES] as $acao){
                     echo "<TD>
         <a href='$PHP_SELF?amr=". $acao[assumir] ."&wkdaas=".$dados[tramitacao_idusuario]."&idposto_anterior=".$_GET["idposto"]."&processo=$processo&H=". $dados[idworkflowtramitacao] ."&idworkflow=". $acao[idworkflow] ."&lista=". $acao[lista] ."&idposto=".$acao[ir]."'>";
