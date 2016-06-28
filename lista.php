@@ -71,9 +71,9 @@ if (is_array($form[TITULO]))
 */
 
     echo "<tr>";
-        echo "<TD>Processo</td>";
+        echo "<TD><b>Processo</b></td>";
     foreach ($form[TITULO] as $idcampo => $linha){
-        echo "<TD title='$idcampo'> $idcampo ". $linha ."</td>";
+        echo "<TD title='$idcampo'>  <b> ". $linha ."</b></td>";
     }
     echo "</tr>";
 

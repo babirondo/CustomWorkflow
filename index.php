@@ -65,10 +65,14 @@ if ($_GET["idworkflow"] > 0){
 					<table border=0 width=100% >
 					  <tr>
 					  <?php
-					  foreach ($postos[FETCH] as $linha){
-					  	echo "<TD> <a href='$PHP_SELF?idworkflow=".$_GET["idworkflow"]."&lista=". $linha["lista"]."&idposto=". $linha["idposto"]."'>". $linha["posto"]."</a></td>";
+						if (is_array($postos[FETCH]))
+						{
 
-					  }
+						  foreach ($postos[FETCH] as $linha){
+						  	echo "<TD> <a href='$PHP_SELF?idworkflow=".$_GET["idworkflow"]."&lista=". $linha["lista"]."&idposto=". $linha["idposto"]."'>". $linha["posto"]."</a></td>";
+
+						  }
+						}
 					  ?>
 					  </tr>
 					</table>
