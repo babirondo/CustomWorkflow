@@ -60,7 +60,7 @@ if ($_GET["idposto"] != null){
 
                 foreach ($_POST["idcampoposto"] as $key => $result)
                 {
-                    
+
                     switch ($_POST["inputtype"][$key])
                     {
                       case("list"):
@@ -73,8 +73,8 @@ if ($_GET["idposto"] != null){
                         $array[$key][valor]  = $result;
                     }
 
-                    
-                       
+
+
 
                         $array[$key][idworkflowdado]  = $_POST["idworkflowdado"][$key];
                 }
