@@ -1,5 +1,5 @@
 <?php
-
+namespace raiz;
 require_once("classes/globais.php");
 require_once("classes/diversos.php");
 
