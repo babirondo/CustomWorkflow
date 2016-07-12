@@ -1,5 +1,9 @@
 <?php
+namespace raiz;
+
 session_start();
+
+
 
 if (!$_SESSION["idusuariologado"])
 {
@@ -14,16 +18,27 @@ require_once("classes/globais.php");
 require_once("classes/diversos.php");
  // testando commit do mac 2
 
-$retorno = CallAPI("get", $SERVER_API."getWorkflows/");
+$menus = CallAPI("get", $SERVER_API."getMenus/");
 
 
-if ($_GET["idworkflow"] > 0){
+
+//FIXME: Resolver navegacao entre variaveis workflow e menu, usando os 2 no comeco mas é pra tirar o workflow
+
+// listando postos do workflow
+if ( $_GET["idworkflow"] > 0  ){
+//	$idworkflow = $_GET["idworkflow"] = $_GET["irpara"];
 	$array=null;
 	$array[idusuario] = $_SESSION["idusuariologado"];
 	$postos = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPostos/", json_encode( $array));
 	$array=null;
 }
-
+else if ( $_GET["tipodestino"] == "item"  ){
+//	$idworkflow = $_GET["idworkflow"] = $_GET["irpara"];
+	$array=null;
+	$array[idusuario] = $_SESSION["idusuariologado"];
+	$submenus = CallAPI("POST", $SERVER_API."getSubMenus/".$_GET["idmenu"], json_encode( $array));
+	$array=null;
+}
 ?>
 
 <html>
@@ -38,9 +53,9 @@ if ($_GET["idworkflow"] > 0){
 						<tr>
 								<td>cabecalho  <h1><font color=red> <?=$usar_ambiente;?> </h1></font> </td>
 							<td align=right>
-                                                            Usuário Logado: <?=$_SESSION["idusuariologado"];?><BR>
-                                                            <a href='logout.php'>Logout</a>
-                                                        </td>
+                Usuário Logado: <?=$_SESSION["idusuariologado"];?><BR>
+                <a href='logout.php'>Logout</a>
+            </td>
 						</tr>
 					</table>
 				</td>
@@ -51,9 +66,16 @@ if ($_GET["idworkflow"] > 0){
 					<table border=0 width=100% >
 					  <tr>
 					  <?php
-					  foreach ($retorno[FETCH] as $linha){
-					  	echo "<TD> <a href='$PHP_SELF?idworkflow=". $linha["idworkflow"]."&idposto=". $linha["postoinicial"]."'>". $linha["workflow"]."</a></td>";
+					  foreach ($menus[FETCH] as $linha){
+							switch ($linha["tipodestino"])
+							{
+									case("workflow"):
+										echo "<TD> <a href='$PHP_SELF?tipodestino=". $linha["tipodestino"]."&idworkflow=". $linha["irpara"]."&idmenu=". $linha["idmenu"]."&irpara=". $linha["irpara"]."'>". $linha["menu"]."</a></td>";
 
+									break;
+									default:
+										echo "<TD> <a href='$PHP_SELF?tipodestino=". $linha["tipodestino"]."&idmenu=". $linha["idmenu"]."&irpara=". $linha["irpara"]."'>". $linha["menu"]."</a></td>";
+							}
 					  }
 					  ?>
 					  </tr>
@@ -67,12 +89,21 @@ if ($_GET["idworkflow"] > 0){
 					  <?php
 						if (is_array($postos[FETCH]))
 						{
-
-						  foreach ($postos[FETCH] as $linha){
-						  	echo "<TD> <a href='$PHP_SELF?idworkflow=".$_GET["idworkflow"]."&lista=". $linha["lista"]."&idposto=". $linha["idposto"]."'>". $linha["posto"]."</a></td>";
+  					  foreach ($postos[FETCH] as $linha){
+								//FIXME: gambiarra pra fazer o idprocesso ser igual ao idusuario se o workflow for do tipo de cmapo simples, myprofile
+								if ( $_GET["idworkflow"] == 26) $complemento_processo_igual_idusuario = "&processo=".$_SESSION["idusuariologado"];
+						  	echo "<TD> <a href='$PHP_SELF?idmenu=".$_GET["idmenu"].$complemento_processo_igual_idusuario."&idworkflow=".$_GET["idworkflow"]."&lista=". $linha["lista"]."&idposto=". $linha["idposto"]."'>". $linha["posto"]."</a></td>";
 
 						  }
 						}
+						if (is_array($submenus[FETCH]))
+						{
+  					  foreach ($submenus[FETCH] as $linha){
+						  	echo "<TD> <a href='$PHP_SELF?processo=".$_SESSION["idusuariologado"]."&tipodestino=".$_GET["tipodestino"]."&idmenu=".$_GET["idmenu"]."&idfeature=". $linha["irpara"]."'>". $linha["menu"]."</a></td>";
+						  }
+						}
+
+
 					  ?>
 					  </tr>
 					</table>

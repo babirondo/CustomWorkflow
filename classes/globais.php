@@ -2,6 +2,7 @@
     // configuracao de ambiente
     $usar = "windows";
     $usar = "mac";
+  //  $usar = "mac-docker";
 
     $usar_ambiente = "dev";
   //  $usar_ambiente = "prod";
@@ -20,9 +21,14 @@
       //windows
         $SERVER_API = "127.0.0.1:8080/$caminho_sistema/";
     }
-    else{
+    else if ($usar == "mac"){
     //mac
         $SERVER_API = "localhost/$caminho_sistema/";
+
+    }
+    else if ($usar == "mac-docker"){
+
+        $SERVER_API = "localhost:10080/$caminho_sistema/";
 
     }
 

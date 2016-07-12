@@ -1,4 +1,5 @@
 <?php
+namespace raiz;
 $usuarios = CallAPI("get", $SERVER_API."Usuarios/Posto/".$_GET["idposto"] );
 
 $form = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPosto/Lista/".$_GET["idposto"], json_encode($_POST["filtro"]) );

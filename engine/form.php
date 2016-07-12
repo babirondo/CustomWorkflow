@@ -1,60 +1,15 @@
 <?php
 namespace raiz;
+// *********** FORM DO ENGINE **********
 ?>
 <form action="<?=$PHP_SELF;?>" method=post enctype="multipart/form-data">
 	<input type=hidden name=processar value=1>
 <?php
-// listando historico do processo
-$vida_processo = CallAPI("get", $SERVER_API."VidaProcesso/".$_GET["processo"] );
-
-$exibir_historico=0;
-if ($exibir_historico == 1){
-echo "<tr>";
-		echo "<TD colspan=100><h1> Histórico do Processo</td>";
-echo "</tr>";
-
-foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
-{
-  echo "<tr>
-            <td>Posto</td>
-            <td colspan=7><b>$idposto</b></td>
-        </tr> ";
-        $exibir=null;
-        foreach ($conteudo_posto[$_GET["processo"]] as $campo => $valor )
-        {
-          if ($campo == "tramitacao_idusuario") continue;
-          if ($campo == "-1") continue;
-          if ($campo == "12-original") continue;
-          if ($campo == "-1-ID") continue;
-          if ($campo == "inicioprocesso") continue;
-          if ($campo == "idworkflowtramitacao") continue;
-          if ($campo == "atoresdoposto") continue;
-
-          $exibir[$campo] = $valor;
-        }
-
-        $p=0;
-        foreach ($exibir as $campo => $valor){
-
-
-
-          if ($p == 0) echo "<tr>";
-          echo "<td>$campo</td>";
-          echo "<td>".((strlen($valor) > 30 )?substr( $valor,0,30)."...":$valor)."</td>";
-          $p++;
-          if ($p == 4) {
-              echo "</tr>";
-              $p=0;
-          }
-        }
-}
-
-}// exibir historico
 
 // montando dados do formulario
         if (!is_array($msg_erro))
              // só carrega os dados se não houve erro de validacao
-            $form = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/".(($_GET["processo"])?$_GET["processo"]:"0")."/getPosto/".$_GET["idposto"] );
+            $form = CallAPI("get", $SERVER_API."Engine/getCampos/".$_GET["idfeature"] );
 
             echo "<input type=hidden name=processo value='".$_REQUEST["processo"]."' >";
             echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";

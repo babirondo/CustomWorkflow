@@ -1,28 +1,34 @@
-<?php 
-
+<?php
+namespace raiz;
 session_start();
 error_reporting(E_ALL ^ E_NOTICE );
- 
+
 require_once("classes/globais.php");
 require_once("classes/diversos.php");
  // testando commit do mac 2
- 
+
+
+
+
 if ( $_POST["logar"] == 1){
 	$array[login] = $_POST["login"];
 	$array[senha] = $_POST["senha"];
-	
+
 	$auth = CallAPI("POST", $SERVER_API."Autenticar/"  , json_encode( $array) );
- 
+
 	if ($auth["resultado"] == "SUCESSO"){
-		
+
 		$_SESSION['idusuariologado']= $auth["id"];
 	}
-	else 	
+	else
 		$erro = $auth["erro"];
+
+
+   
 }
 
 if ( $_SESSION["idusuariologado"] > 0){
- 
+
 	header("Location: index.php");
 }
 
@@ -32,9 +38,9 @@ if ( $_SESSION["idusuariologado"] > 0){
 	<head>
 		<title></title>
 	</head>
-	<body> 
-	 
-	
+	<body>
+
+
 		<table border=1 cellspacing=0 cellpadding=0  width=100% height=100%>
 			<form action="<?=$_SERVER["PHP_SELF"];?>" method=post>
 				<input type=hidden name=logar value=1>
@@ -60,9 +66,8 @@ if ( $_SESSION["idusuariologado"] > 0){
 					</table>
 				</td>
 			</tr>
-			</form>  
-			 
+			</form>
+
 		</table>
 	</body>
 </html>
- 
