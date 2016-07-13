@@ -9,7 +9,10 @@ namespace raiz;
 // montando dados do formulario
         if (!is_array($msg_erro))
              // só carrega os dados se não houve erro de validacao
-            $form = CallAPI("get", $SERVER_API."Engine/getCampos/".$_GET["idfeature"] );
+						$array = null;
+		  			$array[processo][valor]  = $_GET["processo"];
+            $form = CallAPI("POST", $SERVER_API."Engine/getCampos/".$_GET["idfeature"] , json_encode( $array) );
+						$array = null;
 
             echo "<input type=hidden name=processo value='".$_REQUEST["processo"]."' >";
             echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";
@@ -19,7 +22,7 @@ namespace raiz;
                 echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
             echo "</tr>";
 
-            foreach ($form[FETCH_CAMPO] as $linha){
+            foreach ($form[FETCH_CAMPO] as $idcampo => $linha){
                     $css=null;
                     $exibir_erro=null;
 
@@ -59,6 +62,12 @@ namespace raiz;
                             echo " </select>";
                         break;
 
+
+                        case("Sim/Nao"):
+                            echo  "<input type=radio name=idcampoposto[". $linha["idcampo"]."] ".(($linha["valor"]==1)?"checked":"")." value=1> Sim <input type=radio   ".((!$linha["valor"])?"checked":"")."  name=idcampoposto[". $linha["idcampo"]."] value=0> Não";
+
+                        break;
+
                         case("list"):
                             echo "<select multiple  name=idcampoposto[". $linha["idcampo"]."][]>";
                             foreach ( $linha["valor_default"] as $idtecnologia  => $val_tecnologia)
@@ -83,11 +92,11 @@ namespace raiz;
                     </table>
                     <table>
                         <tr>
-				<td><input type=button   value=' <<< Voltar'> </td> ";
-		echo "          <td><input type=submit name=finalizar value='".$SYS_DEPARA_CAMPOS["bt_handover"]."'> </td> ";
+														<td><input type=button   value=' <<< Voltar'> </td> ";
+		echo "         				  <td><input type=submit name=finalizar value='".$SYS_DEPARA_CAMPOS["bt_handover"]."'> </td> ";
 
-                if ($form[DADOS_POSTO][starter] != 1)
-                    echo "     <td><input type=submit name=finalizar value='Salvar'> </td>";
+      if ($form[DADOS_POSTO][starter] != 1)
+          echo "     <td><input type=submit name=finalizar value='Salvar'> </td>";
 
                 echo "</tr> ";
 		?>

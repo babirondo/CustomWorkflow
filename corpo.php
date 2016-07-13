@@ -167,9 +167,6 @@ if ($_GET["idfeature"] > 0){
        // salvando dados do form
       if ($_POST["processar"]==1)
       {
-
-      // echo "<pre>"; var_dump($_FILES);echo "</pre>";
-
               // validando campos antes de enviar
               $msg_erro = null;
 
@@ -179,13 +176,8 @@ if ($_GET["idfeature"] > 0){
                  if ($valor == 1)
                  {
                     // todos obrigatorios
-
-
-
                       switch ($_POST["inputtype"][$idcampo])
                       {
-
-
                         case("list"):
                           if (!is_array($_POST["idcampoposto"][$idcampo]))
                           {
@@ -258,15 +250,8 @@ if ($_GET["idfeature"] > 0){
                   $array[processo][acao]  = $_POST["finalizar"];
                   $array[processo][idworkflowtramitacao_original]  = $_POST["H"];
 
-              //   echo "<pre>"; var_dump($array);echo "</pre>";
-
                   // salvando dados
                   $registering = CallAPI("POST", $SERVER_API."Engine/Registrar/".$_GET["idfeature"] , json_encode( $array) );
-
-                  // TODO na hora que der pra fazer multiplos avaliadores pela base, tirar essa gambiarra
-                //  if ($SYS_multiplos_avaliadores[$_GET["idposto"]] > 0)
-                 //     $registering = CallAPI("POST", $SERVER_API."Registrar/".$_GET["idworkflow"]."/".$_GET["idposto"] , json_encode( $array) );
-                  //var_dump($registering);
 
                   if ($registering["resultado"] == "SUCESSO"){
                           echo " <font color='#ff0000'>Dados registrados com sucesso</font> ";
