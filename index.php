@@ -23,22 +23,33 @@ $menus = CallAPI("get", $SERVER_API."getMenus/");
 
 
 //FIXME: Resolver navegacao entre variaveis workflow e menu, usando os 2 no comeco mas é pra tirar o workflow
+if ($_GET["idmenu"] >0){
 
-// listando postos do workflow
-if ( $_GET["idworkflow"] > 0  ){
-//	$idworkflow = $_GET["idworkflow"] = $_GET["irpara"];
-	$array=null;
-	$array[idusuario] = $_SESSION["idusuariologado"];
-	$postos = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPostos/", json_encode( $array));
-	$array=null;
+	switch ($menus["FETCH"][$_GET["idmenu"]]["tipodestino"])
+	{
+				case("workflow"):
+						// listando postos do workflow
+
+							//carregando submenu, caso workflow
+							$array=null;
+							$array[idusuario] = $_SESSION["idusuariologado"];
+							$_GET["idworkflow"] = $menus["FETCH"][$_GET["idmenu"]]["irpara"];
+							//FIXME: _get associando na gambiarra....
+							$postos = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPostos/", json_encode( $array));
+							$array=null;
+
+				break;
+
+				default:
+						$array=null;
+						$array[idusuario] = $_SESSION["idusuariologado"];
+						$submenus = CallAPI("POST", $SERVER_API."getSubMenus/".$_GET["idmenu"], json_encode( $array));
+						$array=null;
+	}
+
+
 }
-else if ( $_GET["tipodestino"] == "item"  ){
-//	$idworkflow = $_GET["idworkflow"] = $_GET["irpara"];
-	$array=null;
-	$array[idusuario] = $_SESSION["idusuariologado"];
-	$submenus = CallAPI("POST", $SERVER_API."getSubMenus/".$_GET["idmenu"], json_encode( $array));
-	$array=null;
-}
+
 ?>
 
 <html>
@@ -67,15 +78,9 @@ else if ( $_GET["tipodestino"] == "item"  ){
 					  <tr>
 					  <?php
 					  foreach ($menus[FETCH] as $linha){
-							switch ($linha["tipodestino"])
-							{
-									case("workflow"):
-										echo "<TD> <a href='$PHP_SELF?tipodestino=". $linha["tipodestino"]."&idworkflow=". $linha["irpara"]."&idmenu=". $linha["idmenu"]."&irpara=". $linha["irpara"]."'>". $linha["menu"]."</a></td>";
 
-									break;
-									default:
-										echo "<TD> <a href='$PHP_SELF?tipodestino=". $linha["tipodestino"]."&idmenu=". $linha["idmenu"]."&irpara=". $linha["irpara"]."'>". $linha["menu"]."</a></td>";
-							}
+										echo "<TD> <a href='$PHP_SELF?idmenu=". $linha["idmenu"]."' >". $linha["menu"]."</a></td>";
+
 					  }
 					  ?>
 					  </tr>
@@ -91,15 +96,15 @@ else if ( $_GET["tipodestino"] == "item"  ){
 						{
   					  foreach ($postos[FETCH] as $linha){
 								//FIXME: gambiarra pra fazer o idprocesso ser igual ao idusuario se o workflow for do tipo de cmapo simples, myprofile
-								if ( $_GET["idworkflow"] == 26) $complemento_processo_igual_idusuario = "&processo=".$_SESSION["idusuariologado"];
-						  	echo "<TD> <a href='$PHP_SELF?idmenu=".$_GET["idmenu"].$complemento_processo_igual_idusuario."&idworkflow=".$_GET["idworkflow"]."&lista=". $linha["lista"]."&idposto=". $linha["idposto"]."'>". $linha["posto"]."</a></td>";
+								//if ( $_GET["idworkflow"] == 26) $complemento_processo_igual_idusuario = "&processo=".$_SESSION["idusuariologado"];
+						  	echo "<TD> <a href='$PHP_SELF?idmenu=".$_GET["idmenu"]."&idworkflow=".$_GET["idworkflow"]."&lista=". $linha["lista"]."&idposto=". $linha["idposto"]."'>". $linha["posto"]."</a></td>";
 
 						  }
 						}
 						if (is_array($submenus[FETCH]))
 						{
   					  foreach ($submenus[FETCH] as $linha){
-						  	echo "<TD> <a href='$PHP_SELF?processo=".$_SESSION["idusuariologado"]."&tipodestino=".$_GET["tipodestino"]."&idmenu=".$_GET["idmenu"]."&idfeature=". $linha["irpara"]."'>". $linha["menu"]."</a></td>";
+						  	echo "<TD> <a href='$PHP_SELF?processo=".$_SESSION["idusuariologado"]."&idmenu=".$_GET["idmenu"]."&idfeature=". $linha["irpara"]."'>". $linha["menu"]."</a></td>";
 						  }
 						}
 

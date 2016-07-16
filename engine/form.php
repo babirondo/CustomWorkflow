@@ -5,14 +5,15 @@ namespace raiz;
 <form action="<?=$PHP_SELF;?>" method=post enctype="multipart/form-data">
 	<input type=hidden name=processar value=1>
 <?php
-
 // montando dados do formulario
         if (!is_array($msg_erro))
              // só carrega os dados se não houve erro de validacao
 						$array = null;
 		  			$array[processo][valor]  = $_GET["processo"];
-            $form = CallAPI("POST", $SERVER_API."Engine/getCampos/".$_GET["idfeature"] , json_encode( $array) );
+            $form = CallAPI("POST", $SERVER_API."Engine/".$_GET["idfeature"]."/Form" , json_encode( $array) );
 						$array = null;
+
+						//echo "<pre> "; var_dump($form);
 
             echo "<input type=hidden name=processo value='".$_REQUEST["processo"]."' >";
             echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";

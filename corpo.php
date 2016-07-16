@@ -267,9 +267,15 @@ if ($_GET["idfeature"] > 0){
               echo "<BR>  <pre>".$registering["DEBUG"]."</pre>";
       }
 
-  switch ($_GET["lista"]){
+ 
 
-      default:
+//echo ;
+  switch ($submenus["FETCH"][$_GET["idfeature"]]["lista"]){
+      case("L"):
+          require_once("engine/lista.php");
+      break;
+
+      case("F"):
           require_once("engine/form.php");
       break;
   }
