@@ -132,7 +132,7 @@ if ($_GET["idposto"] != null){
     if ($_GET["amr"]==1){
         // assumir idprocesso no posto
 
-        $array[$SYS_DEPARA_CAMPOS["Responsavel"]][valor]  = $_SESSION["idusuariologado"];
+        $array[$SYS_DEPARA_CAMPOS["Responsavel"]][valor]  = $_GET["processo"] ;
         $array[$SYS_DEPARA_CAMPOS["Responsavel"]]["idworkflowdado"]  = $_GET["wkdaas"] ;
         $array[$SYS_DEPARA_CAMPOS["Responsavel"]]["idtramitacao"]  = $_GET["H"] ;
         $array[processo][valor]  = $_GET["processo"];
@@ -162,7 +162,7 @@ if ($_GET["idposto"] != null){
 
 // TRATANDO FUNCOES DA ENGINE
 if ($_GET["idfeature"] > 0){
-  //var_dump($_POST);
+  //var_dump($_REQUEST);
 
        // salvando dados do form
       if ($_POST["processar"]==1)
@@ -246,6 +246,8 @@ if ($_GET["idfeature"] > 0){
                       }
                   }
 
+                  //$array[processo][idusuario]  = $_SESSION["idusuariologado"];
+
                   $array[processo][valor]  = $_POST["processo"];
                   $array[processo][acao]  = $_POST["finalizar"];
                   $array[processo][idworkflowtramitacao_original]  = $_POST["H"];
@@ -267,10 +269,14 @@ if ($_GET["idfeature"] > 0){
               echo "<BR>  <pre>".$registering["DEBUG"]."</pre>";
       }
 
- 
-
+  $dados_feature = CallAPI("GET", $SERVER_API."Engine/".$_GET["idfeature"] );
+  //echo "<pre>";var_dump($dados_feature);
+ if ($_GET["idmenu"] == 11){
+//FIXME: gambiarra master pra ver se funciona rapidao
+   $_GET["processo"] = $_SESSION["idusuariologado"];
+ }
 //echo ;
-  switch ($submenus["FETCH"][$_GET["idfeature"]]["lista"]){
+  switch ($dados_feature["DADOS_FEATURE"] ["lista"]){
       case("L"):
           require_once("engine/lista.php");
       break;
@@ -278,6 +284,9 @@ if ($_GET["idfeature"] > 0){
       case("F"):
           require_once("engine/form.php");
       break;
+
+      default:
+        echo "nao achou nada";
   }
 
 }

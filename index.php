@@ -103,8 +103,8 @@ if ($_GET["idmenu"] >0){
 						}
 						if (is_array($submenus[FETCH]))
 						{
-  					  foreach ($submenus[FETCH] as $linha){
-						  	echo "<TD> <a href='$PHP_SELF?processo=".$_SESSION["idusuariologado"]."&idmenu=".$_GET["idmenu"]."&idfeature=". $linha["irpara"]."'>". $linha["menu"]."</a></td>";
+  					  foreach ($submenus[FETCH] as $idsubmenu => $linha){
+						  	echo "<TD> <a href='$PHP_SELF?idmenu=".$_GET["idmenu"]."&idfeature=". $idsubmenu."'>". $linha["menu"]."</a></td>";
 						  }
 						}
 

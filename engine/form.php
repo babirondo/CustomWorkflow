@@ -10,10 +10,11 @@ namespace raiz;
              // só carrega os dados se não houve erro de validacao
 						$array = null;
 		  			$array[processo][valor]  = $_GET["processo"];
+
             $form = CallAPI("POST", $SERVER_API."Engine/".$_GET["idfeature"]."/Form" , json_encode( $array) );
 						$array = null;
 
-						//echo "<pre> "; var_dump($form);
+						 //echo "<pre> "; var_dump($form);
 
             echo "<input type=hidden name=processo value='".$_REQUEST["processo"]."' >";
             echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";
