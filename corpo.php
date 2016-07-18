@@ -164,6 +164,12 @@ if ($_GET["idposto"] != null){
 if ($_GET["idfeature"] > 0){
   //var_dump($_REQUEST);
 
+  if ($_GET["idmenu"] == 11){
+ //FIXME: gambiarra master pra ver se funciona rapidao
+    $_GET["processo"] = $_SESSION["idusuariologado"];
+  }
+  
+
        // salvando dados do form
       if ($_POST["processar"]==1)
       {
@@ -271,10 +277,6 @@ if ($_GET["idfeature"] > 0){
 
   $dados_feature = CallAPI("GET", $SERVER_API."Engine/".$_GET["idfeature"] );
   //echo "<pre>";var_dump($dados_feature);
- if ($_GET["idmenu"] == 11){
-//FIXME: gambiarra master pra ver se funciona rapidao
-   $_GET["processo"] = $_SESSION["idusuariologado"];
- }
 //echo ;
   switch ($dados_feature["DADOS_FEATURE"] ["lista"]){
       case("L"):

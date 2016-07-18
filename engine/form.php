@@ -16,7 +16,7 @@ namespace raiz;
 
 						 //echo "<pre> "; var_dump($form);
 
-            echo "<input type=hidden name=processo value='".$_REQUEST["processo"]."' >";
+            echo "<input type=hidden name=processo value='".$_GET["processo"]."' >";
             echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";
             echo "<input type=hidden name=H value='".$_REQUEST["H"]."' >";
 
