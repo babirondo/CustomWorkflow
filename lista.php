@@ -5,7 +5,7 @@ namespace raiz;
 $usuarios = CallAPI("get", $SERVER_API."Usuarios/Posto/".$_GET["idposto"] );
 
 $form = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPosto/Lista/".$_GET["idposto"], json_encode($_POST["filtro"]) );
-
+ 
 echo "<tr>";
 	echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
 echo "</tr>";
@@ -79,6 +79,8 @@ if (is_array($form[TITULO]))
         echo "<TD title='$idcampo'>  <b> ". $linha ."</b></td>";
     }
     echo "</tr>";
+
+
 
 
     foreach ($form[FETCH]  as $processo => $dados){

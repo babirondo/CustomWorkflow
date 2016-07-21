@@ -156,6 +156,13 @@ if ($_GET["idposto"] != null){
         case("F"):
             require_once("form.php");
         break;
+
+        case("VagaXCandidato"):
+            require_once("lista.vaga.por.candidato.php");
+        break;
+
+        default:
+            echo "Não achou nenhum lista";
     }
 } // fim do fluco de workflow
 
@@ -168,7 +175,7 @@ if ($_GET["idfeature"] > 0){
  //FIXME: gambiarra master pra ver se funciona rapidao
     $_GET["processo"] = $_SESSION["idusuariologado"];
   }
-  
+
 
        // salvando dados do form
       if ($_POST["processar"]==1)
