@@ -4,7 +4,7 @@ namespace raiz;
 //FIXME: adicionar _get[menu] nos links
 $usuarios = CallAPI("get", $SERVER_API."Usuarios/Posto/".$_GET["idposto"] );
 
-$form = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPosto/Lista/".$_GET["idposto"], json_encode( $_GET ) );
+$form = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPosto/ListaAgrupada/".$_GET["idposto"], json_encode( $_GET ) );
 
 echo "<tr>";
 	echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
@@ -28,7 +28,7 @@ if (is_array($form[FUNCOES_POSTO]))
 }
 
 
-
+echo "<PRE>"; var_dump($form);
 if (is_array($form[TITULO]))
 {
 

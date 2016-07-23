@@ -4,10 +4,15 @@ namespace raiz;
 //FIXME: adicionar _get[menu] nos links
 $usuarios = CallAPI("get", $SERVER_API."Usuarios/Posto/".$_GET["idposto"] );
 
-$form = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPosto/Lista/".$_GET["idposto"], json_encode( $_GET ) );
+$novo[CANDIDATOS] = $form["CANDIDATOS"];
+$novo[IDPOSTO] = $_GET["idposto"];
+
+$form = CallAPI("POST", $SERVER_API."Candidatos/".$_GET["processo"] , json_encode( $novo ) );
+
+//echo "<pre>"; var_dump($form);
 
 echo "<tr>";
-	echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
+	echo "<TD colspan=100><h1> Triagem de Candidatos para a Vaga: <a href='processos.php?idprocesso=".$_GET["processo"] ."' target=__blank >".$_GET["processo"] ."</a> </td>";
 echo "</tr>";
 
 
@@ -18,7 +23,7 @@ if (is_array($form[FUNCOES_POSTO]))
                 <table>
                     <tr>";
         foreach ($form[FUNCOES_POSTO] as $funcao => $dados){
-        	echo "<TD> <a href='$PHP_SELF?idmenu=".$_GET["idmenu"]."&idworkflow=".$_GET["idworkflow"]."&idposto_anterior=".$_GET["idposto"]."&lista=".$dados[lista]."&idposto=".$dados[avanca_processo]."'>$funcao</a>  </td>";
+        	echo "<TD> <a href='$PHP_SELF?idworkflow=".$_GET["idworkflow"]."&idposto_anterior=".$_GET["idposto"]."&lista=".$dados[lista]."&idposto=".$dados[avanca_processo]."'>$funcao</a>  </td>";
     		}
 
         echo "    </tr>
@@ -67,7 +72,7 @@ if (is_array($form[TITULO]))
             || !$dados[ $SYS_DEPARA_CAMPOS["Responsavel"] ]){
                 foreach ($form[ACOES] as $acao){
                     echo "<TD>
-        <a href='$PHP_SELF?idmenu=".$_GET["idmenu"]."&amr=". $acao[assumir] ."&wkdaas=".$dados[tramitacao_idusuario]."&idposto_anterior=".$_GET["idposto"]."&processo=$processo&H=". $dados[idworkflowtramitacao] ."&idworkflow=". $acao[idworkflow] ."&lista=". $acao[lista] ."&idposto=".$acao[ir]."'>";
+        <a href='$PHP_SELF?amr=". $acao[assumir] ."&wkdaas=".$dados[tramitacao_idusuario]."&idposto_anterior=".$_GET["idposto"]."&processo=$processo&H=". $dados[idworkflowtramitacao] ."&idworkflow=". $acao[idworkflow] ."&lista=". $acao[lista] ."&idposto=".$acao[ir]."'>";
                     echo  (($acao[assumir]==1 & $dados[tramitacao_idusuario]>0)?"Desassumir":$acao[acao]) ;
                     echo  "</a>
                        </td>";
