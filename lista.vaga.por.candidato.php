@@ -21,6 +21,9 @@ echo "<tr>
 
 $novo[CANDIDATOS] = $form["CANDIDATOS"];
 $novo[IDPOSTO] = $_GET["idposto"];
+$novo[IDVAGA] = $_GET["processo"];
+
+
 
 $candidatos = CallAPI("POST", $SERVER_API."ListarCandidatos/" , json_encode( $novo ) );
 ?>
@@ -35,6 +38,7 @@ echo "
 				<td>Selecionar  </td>
 				<td>Nome do Candidato</td>
 				<td>Tecnologias que domina</td>
+				<td>Match com a Vaga</td>
 				<td>Avaliações</td>
 		 </tr>";
 
@@ -46,6 +50,7 @@ foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 						<td><input type=checkbox name=candidatos_selecionados[$idcandidato]  value='$idcandidato'> </td>
 						<td>".$candidato["nome"]."</td>
 						<td>".$candidato["skills"]."</td>
+						<td nowrap >".$candidato["match"]." %</td>
 						<td>".$candidato["avaliacoes"]."</td>
 			 </tr>";
 }
