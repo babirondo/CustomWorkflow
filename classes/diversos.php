@@ -3,6 +3,16 @@
 namespace raiz;
 
 
+
+function match_candidato_vaga($nota){
+  if ($nota > 80) $retorno = "<font color=blue>$nota %</font>";
+  else if ($nota > 55) $retorno = "<font color=yellow>$nota %</font>";
+  else if ($nota > 35) $retorno = "<font color=orange>$nota %</font>";
+  else  $retorno = "<font color=red>$nota %</font>";
+
+  return $retorno ;
+}
+
  function CallAPI($method, $url, $data = false)
  {
 
