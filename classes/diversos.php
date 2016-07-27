@@ -4,6 +4,26 @@ namespace raiz;
 
 
 
+Function ArrayMergeKeepKeys() {
+ $arg_list = func_get_args();
+
+ foreach((array)$arg_list as $arg){
+   if (is_array ($arg) )
+   {
+     foreach((array)$arg as $K => $V){
+         $Zoo[$K]=$V;
+     }
+   }
+ }
+ return $Zoo;
+}
+
+function link_download($processo){
+  $link ="<a href='download.php?campo=cv&processo=$processo' target='_blank'>Download</a>";
+
+  return $link;
+}
+
 function match_candidato_vaga($nota){
   if ($nota > 80) $retorno = "<font color=blue>". round(  $nota). " %</font>";
   else if ($nota > 55) $retorno = "<font color=yellow>". round(  $nota). " %</font>";
@@ -19,9 +39,8 @@ function match_candidato_vaga($nota){
  	GLOBAL $usar_ambiente;
  	$curl = curl_init();
 
- 	$verbose = 1;
- 	if ($usar_ambiente == "prod")
- 		$verbose = 0;
+	$verbose = 1;
+ 	if ($usar_ambiente == "prod") $verbose = 0;
 
  	switch ($method)
  	{

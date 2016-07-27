@@ -54,7 +54,17 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
 // montando dados do formulario
         if (!is_array($msg_erro))
              // só carrega os dados se não houve erro de validacao
-            $form = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/".(($_GET["processo"])?$_GET["processo"]:"0")."/getPosto/".$_GET["idposto"] );
+//						 $usar_idposto_api = (($_GET["H"])?$_GET["idposto_anterior"]: $_GET["idposto"] )  ;
+						 $usar_idposto_api =  $_GET["idposto"]      ;
+						 $usar_processo_api = (($_GET["processo"])?$_GET["processo"]:"0");
+
+            $form = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/$usar_processo_api/getPosto/$usar_idposto_api" );
+
+						$usar_idposto_anterior_api =  $_GET["idposto_anterior"]      ;
+						$registro = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/$usar_processo_api/getPosto/$usar_idposto_anterior_api" );
+
+
+						$form = ArrayMergeKeepKeys($form, $registro);
 
             echo "<input type=hidden name=processo value='".$_REQUEST["processo"]."' >";
             echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";
@@ -64,7 +74,22 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
                 echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
             echo "</tr>";
 
+ 						//echo "<PRE>";var_dump($form  );
+
             foreach ($form[FETCH_CAMPO] as $linha){
+										// $linha["valor"] = (($linha["valor"])?$linha["valor"]:$linha["valor_default"]) ; // antigo
+										$linha["valor"] =  (($form["FETCH_POSTO"][$_GET["H"]][$usar_processo_api][ $linha["idcampo"] ][valor])
+																				?
+																					(($form["FETCH_POSTO"][$_GET["H"]][$usar_processo_api][ $linha["idcampo"]."-original" ])
+																					?explode(",",$form["FETCH_POSTO"][$_GET["H"]][$usar_processo_api][ $linha["idcampo"]."-original" ])
+																					:$form["FETCH_POSTO"][$_GET["H"]][$usar_processo_api][ $linha["idcampo"] ][valor]
+																					)
+																				:
+																					(($linha["valor"])
+																					?$linha["valor"]
+																					:$linha["valor_default"])
+																				) ;
+
                     $css=null;
                     $exibir_erro=null;
 
@@ -73,6 +98,7 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
                         $exibir_erro = "<font color=#ff0000>".$Erro[$linha["idcampo"]][erro]."</font>";
                     }
                     if (is_array($Erro)){
+
                         $linha["valor"] = $Restore[$linha["idcampo"]][valor_postado];
                     }
 
@@ -83,7 +109,6 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
                             <TD> ";
 
 
-										$linha["valor"] = (($linha["valor"])?$linha["valor"]:$linha["valor_default"]) ;
 
                     switch ($linha["inputtype"])
                     {
@@ -92,7 +117,7 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
                         break;
 
                         case("file"):
-                            echo "<input type=file name=idcampoposto[". $linha["idcampo"]."]> </textarea>";
+                            echo "<input type=file name=idcampoposto[". $linha["idcampo"]."]>  ".link_download($_GET["processo"]) ;
                         break;
 
 
@@ -117,9 +142,9 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
                     }
 
                     echo " $exibir_erro
-                            </td>
+                          </td>
                        </tr>	 ";
-                    echo "<input type=hidden name=idworkflowdado[". $linha["idcampo"]."] value='". $linha["idworkflowdado"]."'>";
+                    echo "<input type=hidden name=idworkflowdado[". $linha["idcampo"]."] value='".  $form["FETCH_POSTO"][$_GET["H"]][$usar_processo_api][ $linha["idcampo"] ][workflowdado]  ."'>";
                     echo "<input type=hidden name=obrigatorio[". $linha["idcampo"]."] value='". $linha["obrigatorio"]."'>";
                     echo "<input type=hidden name=inputtype[". $linha["idcampo"]."]  value='". $linha["inputtype"]."'>";
             }

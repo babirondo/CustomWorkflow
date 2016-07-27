@@ -100,9 +100,11 @@ namespace raiz;
                       {
                               if (!$result) continue;
 
-                              $array[$key][idpostocampo]  = $key;
-                              $array[$key][valor]  = base64_encode(addslashes(fread(fopen($result, "r"), filesize($result))))  ;
 
+                              $array[$key][idpostocampo]  = $key;
+                              $array[$key][valor]  = $FILES["idcampoposto"]["name"][$key]."|||".base64_encode( (fread(fopen($result, "r"), filesize($result))))  ;
+
+ 
                               $array[$key][idworkflowdado]  = $POST["idworkflowdado"][$key];
                       }
                   }

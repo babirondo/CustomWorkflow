@@ -38,6 +38,7 @@ echo "
 				<td>Selecionar  </td>
 				<td>Nome do Candidato</td>
 				<td>Tecnologias que domina</td>
+				<td>CV</td>
 				<td>Match com a Vaga</td>
 				<td colspan=2>Avaliações</td>
 		 </tr>";
@@ -50,6 +51,7 @@ foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 						<td><input type=checkbox name=candidatos_selecionados[$idcandidato]  value='$idcandidato'> </td>
 						<td>".$candidato["nome"]."</td>
 						<td>".$candidato["skills"]."</td>
+						<td>".link_download($idcandidato)  ."</td>
 						<td nowrap 	>".match_candidato_vaga( $candidato["match"])."</td>
 						<td>".$candidato["senioridade1"]."</td>
 						<td>".$candidato["senioridade2"]."</td>
