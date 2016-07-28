@@ -7,11 +7,11 @@ error_reporting(E_ALL ^ E_NOTICE );
 
 require_once("classes/globais.php");
 require_once("classes/diversos.php");
-$vida_processo = CallAPI("get", $SERVER_API."VidaProcesso/".$_GET["processo"] );
+$vida_processo = CallAPI("get", $SERVER_API."VidaProcesso/".$_GET["processo"] ,null, 0);
 
-//echo "<pre>"; var_dump($vida_processo);
+//echo "<pre>"; var_dump($vida_processo);exit;/
 
-$cv =  $vida_processo[FETCH][$_GET["processo"] ] [ $vida_processo[ "CV"] ]  ;
+$cv =  $vida_processo[FETCH][$_GET["processo"] ] [ $vida_processo[CONFIGURACOES][ "CV"] ]  ;
 //echo "<PRE>" ; var_dump($cv); exit;
 
 $quebrado = explode("|||",$cv);

@@ -76,7 +76,7 @@ foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 				$resu = ((strlen($resu) > 30 )?substr( $resu,0,30)."...":$resu);
 
 
-				if ($campo == 214)
+				if ($campo == $candidatos["CONFIGURACOES"] [CV])
 					echo "<TD>   ". (($candidato[$campo])? link_download($idcandidato): "-" )."  </td>";
 				else
 					echo "<TD>   $resu  </td>";
@@ -84,7 +84,7 @@ foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 
 	  }
 
-		echo " <td nowrap 	>".match_candidato_vaga( $candidato["match"])."</td>"; 
+		echo " <td nowrap 	>".match_candidato_vaga( $candidato["match"])."</td>";
 
 	echo "
 			 </tr>";

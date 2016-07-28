@@ -40,7 +40,7 @@ if (is_array($form[TITULO]))
     echo "</tr>";
 
 
-
+//$form["FETCH_POSTO"]=null; echo "<PRE>"; var_dump($form);
 
     foreach ($form[FETCH]  as $processo => $dados){
         echo "<Tr>";
@@ -57,7 +57,19 @@ if (is_array($form[TITULO]))
             $resu = (($resu)?$resu:$dados[$campo]);
 						$resu = ((strlen($resu) > 30 )?substr( $resu,0,30)."...":$resu);
 
-            echo "<TD>   $resu  </td>";
+						if ($campo == $form["CONFIGURACOES"] [CV]){
+							$usar = (($dados[ $form["CONFIGURACOES"]["ENTIDADE_FILHA_APONTA_PARA_CANDIDATO"] ]>0 )
+												?$dados[ $form["CONFIGURACOES"]["ENTIDADE_FILHA_APONTA_PARA_CANDIDATO"] ]
+												:$processo
+											);
+							echo "<TD>   ". (($dados[$campo])? link_download($usar): "-" )."  </td>";
+
+
+						}
+						else
+							echo "<TD>   $resu  </td>";
+
+//            echo "<TD>   $resu  </td>";
 
 
         }
