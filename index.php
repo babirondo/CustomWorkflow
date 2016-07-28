@@ -123,5 +123,5 @@ if ($_GET["idmenu"] >0){
 </html>
 <?php
 } // usuario logado
-$chama_cron = CallAPI("get", $SERVER_API."cron.php");
+//$chama_cron = CallAPI("get", $SERVER_API."cron.php");
 ?>

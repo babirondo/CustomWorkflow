@@ -33,28 +33,60 @@ $candidatos = CallAPI("POST", $SERVER_API."ListarCandidatos/" , json_encode( $no
 echo "<input type=hidden name=processo value='".$_REQUEST["processo"]."' >";
 echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";
 
-echo "
-		<tr>
-				<td>Selecionar  </td>
-				<td>Nome do Candidato</td>
-				<td>Tecnologias que domina</td>
-				<td>CV</td>
-				<td>Match com a Vaga</td>
-				<td colspan=2>Avaliações</td>
-		 </tr>";
 
-//echo "<pre>"; var_dump($candidatos["FETCH"] );
+echo "<tr>";
+		echo "<TD><b>Selecionar</b></td>";
+foreach ($candidatos[TITULO] as $idcampo => $linha){
+		echo "<TD title='$idcampo'>   <b> ". $linha ."</b></td>";
+}
+    echo "<TD><b>Match com a vaga</b></td>";
+echo "</tr>";
+
+
+
+ //echo "<pre>"; var_dump($candidatos  );
 
 
 foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
-	echo "<tr>
-						<td><input type=checkbox name=candidatos_selecionados[$idcandidato]  value='$idcandidato'> </td>
-						<td>".$candidato["nome"]."</td>
+	echo "<tr>";
+	echo "
+						<td><input type=checkbox name=candidatos_selecionados[$idcandidato]  value='$idcandidato'> </td>";
+						/*
+											<td>".$candidato["nome"]."</td>
 						<td>".$candidato["skills"]."</td>
-						<td>".link_download($idcandidato)  ."</td>
+						<td>".$candidato["consultoria"]."</td>
+						<td>". (($candidato["cv"] )? link_download($idcandidato): "-" )." </td>
 						<td nowrap 	>".match_candidato_vaga( $candidato["match"])."</td>
 						<td>".$candidato["senioridade1"]."</td>
-						<td>".$candidato["senioridade2"]."</td>
+						<td>".$candidato["senioridade2"]."</td>";
+						*/
+
+		foreach ($candidatos[TITULO]  as $campo => $linha){
+
+
+	      // Resolver o campo responsÃ¡vel ou imprimir direto da api
+	      $resu = null;
+				/*
+	      foreach ($SYS_DEPARA_CAMPOS as $lab => $chv){
+	          if ($chv == $campo )
+	              $resu = $usuarios["USUARIOS_POSTO"][$_GET["idposto"]][$dados[$campo]];
+	      }
+				*/
+	      $resu = (($resu)?$resu:$candidato[$campo]);
+				$resu = ((strlen($resu) > 30 )?substr( $resu,0,30)."...":$resu);
+
+
+				if ($campo == 214)
+					echo "<TD>   ". (($candidato[$campo])? link_download($idcandidato): "-" )."  </td>";
+				else
+					echo "<TD>   $resu  </td>";
+
+
+	  }
+
+		echo " <td nowrap 	>".match_candidato_vaga( $candidato["match"])."</td>"; 
+
+	echo "
 			 </tr>";
 }
 
