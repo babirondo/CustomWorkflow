@@ -73,7 +73,7 @@ foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 	      }
 				*/
 	      $resu = (($resu)?$resu:$candidato[$campo]);
-				$resu = ((strlen($resu) > 30 )?substr( $resu,0,30)."...":$resu);
+				$resu = ((strlen($resu) > 60 )?substr( $resu,0,60)."...":$resu);
 
 
 				if ($campo == $candidatos["CONFIGURACOES"] [CV])
