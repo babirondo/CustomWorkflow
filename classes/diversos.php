@@ -25,10 +25,10 @@ function link_download($processo){
 }
 
 function match_candidato_vaga($nota){
-  if ($nota > 80) $retorno = "<font color=blue>". round(  $nota). " %</font>";
-  else if ($nota > 55) $retorno = "<font color=yellow>". round(  $nota). " %</font>";
+  if ($nota > 80) $retorno = "<font color=#0000ff><B>". round(  $nota). " %</b></font>";
+  else if ($nota > 55) $retorno = "<font color=#218c8c>". round(  $nota). " %</font>";
   else if ($nota > 35) $retorno = "<font color=orange>". round(  $nota). " %</font>";
-  else  $retorno = "<font color=red>". round(  $nota). " %</font>";
+  else  $retorno = "<font color=#fa3746>". round(  $nota). " %</font>";
 
   return   ( $retorno ) ;
 }

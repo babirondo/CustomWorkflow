@@ -10,8 +10,8 @@ echo "<tr>";
 echo "</tr>";
 
 echo "<tr>
-					<td>Tecnologias mandatórias para a Vaga:</td>
-					<td width=80%>".$form["DADOS_PROCESSO"]["TECNOLOGIAS_MANDATORIAS"]."</td>
+					<td colspan=3>Tecnologias mandatórias para a Vaga:</td>
+					<td colspan=6	>".$form["DADOS_PROCESSO"]["TECNOLOGIAS_MANDATORIAS"]."</td>
 			</tr>	";
 
 	echo "<tr>";
@@ -36,10 +36,10 @@ echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"
 
 echo "<tr>";
 		echo "<TD><b>Selecionar</b></td>";
+		echo "<TD><b>Match <BR> com a vaga</b></td>";
 foreach ($candidatos[TITULO] as $idcampo => $linha){
 		echo "<TD title='$idcampo'>   <b> ". $linha ."</b></td>";
 }
-    echo "<TD><b>Match com a vaga</b></td>";
 echo "</tr>";
 
 
@@ -50,16 +50,9 @@ echo "</tr>";
 foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 	echo "<tr>";
 	echo "
-						<td><input type=checkbox name=candidatos_selecionados[$idcandidato]  value='$idcandidato'> </td>";
-						/*
-											<td>".$candidato["nome"]."</td>
-						<td>".$candidato["skills"]."</td>
-						<td>".$candidato["consultoria"]."</td>
-						<td>". (($candidato["cv"] )? link_download($idcandidato): "-" )." </td>
-						<td nowrap 	>".match_candidato_vaga( $candidato["match"])."</td>
-						<td>".$candidato["senioridade1"]."</td>
-						<td>".$candidato["senioridade2"]."</td>";
-						*/
+						<td align=center><input type=checkbox name=candidatos_selecionados[$idcandidato]  value='$idcandidato'> </td>";
+
+						echo " <td nowrap 	>".match_candidato_vaga( $candidato["match"])."</td>";
 
 		foreach ($candidatos[TITULO]  as $campo => $linha){
 
@@ -72,19 +65,19 @@ foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 	              $resu = $usuarios["USUARIOS_POSTO"][$_GET["idposto"]][$dados[$campo]];
 	      }
 				*/
+				$tam = 350;
 	      $resu = (($resu)?$resu:$candidato[$campo]);
-				$resu = ((strlen($resu) > 60 )?substr( $resu,0,60)."...":$resu);
+				$resu = ((strlen($resu) > $tam )?substr( $resu,0,$tam)."...":$resu);
 
 
 				if ($campo == $candidatos["CONFIGURACOES"] [CV])
 					echo "<TD>   ". (($candidato[$campo])? link_download($idcandidato): "-" )."  </td>";
 				else
-					echo "<TD>   $resu  </td>";
+					echo "<TD >   ". nl2br($resu)."   </td>";
 
 
 	  }
 
-		echo " <td nowrap 	>".match_candidato_vaga( $candidato["match"])."</td>";
 
 	echo "
 			 </tr>";

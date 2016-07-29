@@ -55,7 +55,8 @@ if (is_array($form[TITULO]))
                     $resu = $usuarios["USUARIOS_POSTO"][$_GET["idposto"]][$dados[$campo]];
             }
             $resu = (($resu)?$resu:$dados[$campo]);
-						$resu = ((strlen($resu) > 30 )?substr( $resu,0,30)."...":$resu);
+						$tam = 200;
+						$resu = ((strlen($resu) > $tam )?substr( $resu,0,$tam)."...":$resu);
 
 						if ($campo == $form["CONFIGURACOES"] [CV]){
 							$usar = (($dados[ $form["CONFIGURACOES"]["ENTIDADE_FILHA_APONTA_PARA_CANDIDATO"] ]>0 )
