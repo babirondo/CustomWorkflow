@@ -67,6 +67,10 @@ if (is_array($form[TITULO]))
 
 
 						}
+						else if ($campo == $form["CONFIGURACOES"] ["github"])
+							echo "<TD>   ". (($dados[$campo])? link_download($dados[$campo], 'github'): "-" )."  </td>";
+
+
 						else
 							echo "<TD>   $resu  </td>";
 
