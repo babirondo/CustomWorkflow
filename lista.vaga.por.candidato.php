@@ -69,9 +69,10 @@ foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 	      $resu = (($resu)?$resu:$candidato[$campo]);
 				$resu = ((strlen($resu) > $tam )?substr( $resu,0,$tam)."...":$resu);
 
-
 				if ($campo == $candidatos["CONFIGURACOES"] [CV])
-					echo "<TD>   ". (($candidato[$campo])? link_download($idcandidato): "-" )."  </td>";
+					echo "<TD>   ". (($candidato[$campo])? link_download($idcandidato, 'CV'): "-" )."  </td>";
+				else if ($campo == $candidatos["CONFIGURACOES"] ["github"])
+					echo "<TD>   ". (($candidato[$campo])? link_download($candidato[$campo], 'github'): "-" )."  </td>";
 				else
 					echo "<TD >   ". nl2br($resu)."   </td>";
 

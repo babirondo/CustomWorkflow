@@ -63,7 +63,7 @@ if (is_array($form[TITULO]))
 												?$dados[ $form["CONFIGURACOES"]["ENTIDADE_FILHA_APONTA_PARA_CANDIDATO"] ]
 												:$processo
 											);
-							echo "<TD>   ". (($dados[$campo])? link_download($usar): "-" )."  </td>";
+							echo "<TD>   ". (($dados[$campo])? link_download($usar, "CV"): "-" )."  </td>";
 
 
 						}

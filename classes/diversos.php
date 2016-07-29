@@ -18,8 +18,17 @@ Function ArrayMergeKeepKeys() {
  return $Zoo;
 }
 
-function link_download($processo){
-  $link ="<a href='download.php?campo=cv&processo=$processo' target='_blank'>Download</a>";
+function link_download($valor, $tipo){
+  switch ($tipo)    {
+    case("CV"):
+      $link ="<a href='download.php?campo=cv&processo=$valor' target='_blank'>Download</a>";
+    break;
+
+    case("github"):
+      $link ="<a href='$valor' target='_blank'>Repositório</a>";
+    break;
+
+  }
 
   return $link;
 }
@@ -27,7 +36,7 @@ function link_download($processo){
 function match_candidato_vaga($nota){
   if ($nota > 80) $retorno = "<font color=#0000ff><B>". round(  $nota). " %</b></font>";
   else if ($nota > 55) $retorno = "<font color=#218c8c>". round(  $nota). " %</font>";
-  else if ($nota > 35) $retorno = "<font color=orange>". round(  $nota). " %</font>";
+  else if ($nota > 35) $retorno = "<font color=#FF8C00>". round(  $nota). " %</font>";
   else  $retorno = "<font color=#fa3746>". round(  $nota). " %</font>";
 
   return   ( $retorno ) ;

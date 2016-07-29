@@ -117,7 +117,7 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
                         break;
 
                         case("file"):
-                            echo "<input type=file name=idcampoposto[". $linha["idcampo"]."]>  ".link_download($_GET["processo"]) ;
+                            echo "<input type=file name=idcampoposto[". $linha["idcampo"]."]>  ".link_download($_GET["processo"], "CV") ;
                         break;
 
 
