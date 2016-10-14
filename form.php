@@ -60,6 +60,8 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
 
             $form = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/$usar_processo_api/getPosto/$usar_idposto_api" );
 
+						$botao_handover = $form[DADOS_POSTO][exibir_handover];
+
 						$usar_idposto_anterior_api =  $_GET["idposto_anterior"]      ;
 						$registro = CallAPI("get", $SERVER_API.$_GET["idworkflow"]."/$usar_processo_api/getPosto/$usar_idposto_anterior_api" );
 
@@ -153,11 +155,13 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
                     </table>
                     <table>
                         <tr>
-				<td><input type=button   value=' <<< Voltar'> </td> ";
-		echo "          <td><input type=submit name=finalizar value='".$SYS_DEPARA_CAMPOS["bt_handover"]."'> </td> ";
+				<td>   <input type=button   value=' <<< Voltar'> </td> ";
 
-                if ($form[DADOS_POSTO][starter] != 1)
-                    echo "     <td><input type=submit name=finalizar value='Salvar'> </td>";
+				if ($botao_handover == 1)
+					echo "<td><input type=submit name=finalizar value='".$SYS_DEPARA_CAMPOS["bt_handover"]."'> </td> ";
+
+        if ($form[DADOS_POSTO][starter] != 1)
+            echo "     <td><input type=submit name=finalizar value='Salvar'> </td>";
 
                 echo "</tr> ";
 		?>
