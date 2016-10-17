@@ -123,6 +123,7 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
                         break;
 
 
+				 
                         case("select"):
                             echo "<select    name=idcampoposto[". $linha["idcampo"]."] >";
                             foreach ( $linha["valor_default"] as $idtecnologia  => $val_tecnologia)
