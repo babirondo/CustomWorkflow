@@ -19,12 +19,13 @@ if ( $_POST["logar"] == 1){
 	if ($auth["resultado"] == "SUCESSO"){
 
 		$_SESSION['idusuariologado']= $auth["id"];
+		$_SESSION['usuariologado']= $auth["nome"];
 	}
 	else
 		$erro = $auth["erro"];
 
 
-   
+
 }
 
 if ( $_SESSION["idusuariologado"] > 0){

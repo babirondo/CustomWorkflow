@@ -48,7 +48,7 @@ function match_candidato_vaga($nota){
  	GLOBAL $usar_ambiente;
  	$curl = curl_init();
 
-	//$verbose = 1;
+//	$verbose = 0;
  	if ($usar_ambiente == "prod") $verbose = 0;
 
  	switch ($method)

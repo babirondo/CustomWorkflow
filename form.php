@@ -1,6 +1,7 @@
 <?php
 namespace raiz;
 ?>
+<table class=grid>
 <form action="<?=$PHP_SELF;?>" method=post enctype="multipart/form-data">
 	<input type=hidden name=processar value=1>
 <?php
@@ -72,9 +73,7 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
             echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";
             echo "<input type=hidden name=H value='".$_REQUEST["H"]."' >";
 
-            echo "<tr>";
-                echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
-            echo "</tr>";
+            echo "<caption>".$form["DADOS_POSTO"][nomeposto]."</caption>";
 
  						//echo "<PRE>";var_dump($form  );
 
@@ -123,7 +122,7 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
                         break;
 
 
-				 
+
                         case("select"):
                             echo "<select    name=idcampoposto[". $linha["idcampo"]."] >";
                             foreach ( $linha["valor_default"] as $idtecnologia  => $val_tecnologia)

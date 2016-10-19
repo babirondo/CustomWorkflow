@@ -1,5 +1,8 @@
 <?php
 namespace raiz;
+
+
+die("Não implementado");
 require_once("classes/globais.php");
 require_once("classes/diversos.php");
 

@@ -9,24 +9,20 @@ namespace raiz;
 
 $form = CallAPI("POST", $SERVER_API."Engine/".$_GET["idfeature"]."/Lista", json_encode($_POST["filtro"]) );
 
-echo "<tr>";
-	echo "<TD colspan=100><h1> ".$form["DADOS_feature"][nomefeature]."</td>";
-echo "</tr>";
+echo "<table class=grid>
+			<caption>".$form["DADOS_feature"][nomefeature]."</caption>";
 
 //echo "<Pre>"; var_dump($form);
 
 if (is_array($form[FUNCOES_FEATURE]))
 {
-    echo "<tr>";
-        echo "<TD align=right colspan=100>
-                <table>
-                    <tr>";
+    echo "<tr class='funcoes'>";
+        echo "<TD align=right colspan=100> ";
 				        foreach ($form[FUNCOES_FEATURE] as $funcao => $dados){
-				        	echo "<TD> <a href='$PHP_SELF?idmenu=".$_GET["idmenu"]."&idfeature=".$dados["goto"]."'>$funcao</a>  </td>";
+				        	echo " <a href='$PHP_SELF?idmenu=".$_GET["idmenu"]."&idfeature=".$dados["goto"]."'>$funcao</a>  ";
 				    		}
 
-        echo "    </tr>
-            </table>
+        echo "
         </td>";
     echo "</tr>";
 }
@@ -37,12 +33,15 @@ if (is_array($form[TITULO]))
 {
 
 
-    echo "<tr>";
-        echo "<TD><b>#</b></td>";
+    echo "<thead>
+				<tr>";
+        echo "<Th # </th>";
     foreach ($form[TITULO] as $idcampo => $linha){
-        echo "<TD title='$idcampo'>  <b> ". $linha ."</b></td>";
+        echo "<Th  >  ". $linha ." </th>";
     }
-    echo "</tr>";
+    echo "</tr>
+				</thead>
+				<tbody>";
 
     foreach ($form[FETCH]  as $processo => $dados){
         echo "<Tr>";
@@ -53,7 +52,7 @@ if (is_array($form[TITULO]))
             $resu =  $dados[$campo];
 						$resu = ((strlen($resu) > 30 )?substr( $resu,0,30)."...":$resu);
 
-            echo "<TD>   $resu  </td>";
+            echo "<TD>   $resu    </td>";
 
 
         }
@@ -80,6 +79,6 @@ else
     echo "<tr>
                 <td>Nenhum registro encontrado.... :(</td>
           </tr>";
-
-
 ?>
+</tbody>
+</table>

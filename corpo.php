@@ -1,8 +1,6 @@
 <?php
 namespace raiz;
-?>
-<table  width=100% border=1>
-<?php
+
 
 require_once("regras_negocio.php");
 

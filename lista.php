@@ -6,25 +6,25 @@ $usuarios = CallAPI("get", $SERVER_API."Usuarios/Posto/".$_GET["idposto"] );
 
 $form = CallAPI("POST", $SERVER_API.$_GET["idworkflow"]."/getPosto/Lista/".$_GET["idposto"], json_encode( $_GET ) );
 
-echo "<tr>";
-	echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
-echo "</tr>";
+echo "
+		<table  class=grid  >
+		 <caption> ".$form["DADOS_POSTO"][nomeposto]."</caption>";
 
 
 if (is_array($form[FUNCOES_POSTO]))
 {
-    echo "<tr>";
-        echo "<TD align=right colspan=100>
-                <table>
-                    <tr>";
-        foreach ($form[FUNCOES_POSTO] as $funcao => $dados){
-        	echo "<TD> <a href='$PHP_SELF?idmenu=".$_GET["idmenu"]."&idworkflow=".$_GET["idworkflow"]."&idposto_anterior=".$_GET["idposto"]."&lista=".$dados[lista]."&idposto=".$dados[avanca_processo]."'>$funcao</a>  </td>";
-    		}
+	echo "
+			 <tr class='funcoes'>";
+		 echo "<TD align=right colspan=100>
+							";
+		 foreach ($form[FUNCOES_POSTO] as $funcao => $dados){
+			 echo "  <a href='$PHP_SELF?idmenu=".$_GET["idmenu"]."&idworkflow=".$_GET["idworkflow"]."&idposto_anterior=".$_GET["idposto"]."&lista=".$dados[lista]."&idposto=".$dados[avanca_processo]."'>$funcao</a>  ";
+		 }
 
-        echo "    </tr>
-            </table>
-        </td>";
-    echo "</tr>";
+		 echo "
+		 </td>";
+	echo "</tr>
+	";
 }
 
 
@@ -32,12 +32,17 @@ if (is_array($form[FUNCOES_POSTO]))
 if (is_array($form[TITULO]))
 {
 
-    echo "<tr>";
-        echo "<TD><b>Processo</b></td>";
+    echo "<thead>
+					<tr>";
+        echo "<Th>Processo</th>";
     foreach ($form[TITULO] as $idcampo => $linha){
-        echo "<TD title='$idcampo'>  <b> ". $linha ."</b></td>";
+        echo "<Th title='$idcampo'>  ". $linha ." </th>";
     }
-    echo "</tr>";
+		echo "<Th colspan=".count($form[ACOES])." > Opções </th>";
+
+     echo "</tr>
+	    	</thead>
+				<tbody>";
 
 
 //$form["FETCH_POSTO"]=null; echo "<PRE>"; var_dump($form);
@@ -83,11 +88,12 @@ if (is_array($form[TITULO]))
             if ($dados[ $SYS_DEPARA_CAMPOS["Responsavel"]."-ID" ] == $_SESSION["idusuariologado"]
             || !$dados[ $SYS_DEPARA_CAMPOS["Responsavel"] ]){
                 foreach ($form[ACOES] as $acao){
-                    echo "<TD>
-        <a href='$PHP_SELF?idmenu=".$_GET["idmenu"]."&amr=". $acao[assumir] ."&wkdaas=".$dados[tramitacao_idusuario]."&idposto_anterior=".$_GET["idposto"]."&processo=$processo&H=". $dados[idworkflowtramitacao] ."&idworkflow=". $acao[idworkflow] ."&lista=". $acao[lista] ."&idposto=".$acao[ir]."'>";
+
+                    echo "<TD>   <a href='$PHP_SELF?idmenu=".$_GET["idmenu"]."&amr=". $acao[assumir] ."&wkdaas=".$dados[tramitacao_idusuario]."&idposto_anterior=".$_GET["idposto"]."&processo=$processo&H=". $dados[idworkflowtramitacao] ."&idworkflow=". $acao[idworkflow] ."&lista=". $acao[lista] ."&idposto=".$acao[ir]."'>";
                     echo  (($acao[assumir]==1 & $dados[tramitacao_idusuario]>0)?"Desassumir":$acao[acao]) ;
                     echo  "</a>
                        </td>";
+
                 }
 
             }
@@ -96,6 +102,8 @@ if (is_array($form[TITULO]))
 
         echo "</tr>";
     }
+		echo "</tbody>
+		    </table>";
 }
 else
     echo "<tr>

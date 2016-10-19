@@ -2,6 +2,7 @@
 namespace raiz;
 // *********** FORM DO ENGINE **********
 ?>
+<table class=grid>
 <form action="<?=$PHP_SELF;?>" method=post enctype="multipart/form-data">
 	<input type=hidden name=processar value=1>
 <?php
@@ -20,9 +21,7 @@ namespace raiz;
             echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";
             echo "<input type=hidden name=H value='".$_REQUEST["H"]."' >";
 
-            echo "<tr>";
-                echo "<TD colspan=100><h1> ".$form["DADOS_POSTO"][nomeposto]."</td>";
-            echo "</tr>";
+            echo "<caption> ".$form["DADOS_POSTO"][nomeposto]."</caption>";
 
             foreach ($form[FETCH_CAMPO] as $idcampo => $linha){
                     $css=null;
@@ -39,7 +38,7 @@ namespace raiz;
 
 
                     echo "<tr $css>
-                            <TD> ".$linha["idcampo"]." ".(($linha["obrigatorio"])?"<font color=#ff0000>*</font>":""). $linha["campo"]."</td>
+                            <TD>   ".(($linha["obrigatorio"])?"<font color=#ff0000>*</font>":""). $linha["campo"]."</td>
                             <TD> ";
 
 

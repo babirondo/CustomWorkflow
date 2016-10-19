@@ -5,18 +5,16 @@ namespace raiz;
 
 $form = CallAPI("GET", $SERVER_API."Vaga/".$_GET["processo"]."/Candidatos"  );
 
-echo "<tr>";
-	echo "<TD colspan=100><h1> Nome do Posto: ".$form["DADOS_POSTO"][nomeposto]."</td>";
-echo "</tr>";
+echo " 	<table class=grid>  ";
 
-echo "<tr>
-					<td colspan=3>Tecnologias mandatórias para a Vaga:</td>
-					<td colspan=6	>".$form["DADOS_PROCESSO"]["TECNOLOGIAS_MANDATORIAS"]."</td>
-			</tr>	";
-
+echo "<caption>Tecnologias mandatórias para a Vaga: ".$form["DADOS_PROCESSO"]["TECNOLOGIAS_MANDATORIAS"]."<BR>
+Candidatos encontrados na base de currículos
+</caption>";
+/*
 	echo "<tr>";
 		echo "<TD colspan=100><h3> Possíveis Candidatos </td>";
 	echo "</tr>";
+	*/
 
 
 $novo[CANDIDATOS] = $form["CANDIDATOS"];
@@ -27,6 +25,7 @@ $novo[IDVAGA] = $_GET["processo"];
 
 $candidatos = CallAPI("POST", $SERVER_API."ListarCandidatos/" , json_encode( $novo ) );
 ?>
+<table class=grid  >
 <form action="<?=$PHP_SELF;?>" method=post enctype="multipart/form-data">
 	<input type=hidden name=aplicar_candidatos value=1>
 <?php
@@ -34,13 +33,19 @@ echo "<input type=hidden name=processo value='".$_REQUEST["processo"]."' >";
 echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";
 
 
-echo "<tr>";
-		echo "<TD><b>Selecionar</b></td>";
-		echo "<TD><b>Match <BR> com a vaga</b></td>";
-foreach ($candidatos[TITULO] as $idcampo => $linha){
-		echo "<TD title='$idcampo'>   <b> ". $linha ."</b></td>";
-}
-echo "</tr>";
+echo "<thead>
+		<tr>";
+		echo "<Th><b>Selecionar</b></th>";
+		echo "<Th><b>Match <BR> com a vaga</b></th>";
+
+		//echo "<PRE>"; var_dump($candidatos[TITULO]); exit;
+
+		foreach ($candidatos[TITULO] as $idcampo => $linha){
+				echo "<Th title='$idcampo'>     <b> ". $linha ."</b></th>";
+		}
+echo "</tr>
+	</thead>
+	<tbody>";
 
 
 
@@ -67,14 +72,21 @@ foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 				*/
 				$tam = 350;
 	      $resu = (($resu)?$resu:$candidato[$campo]);
-				$resu = ((strlen($resu) > $tam )?substr( $resu,0,$tam)."...":$resu);
+			//	$resu = ((strlen($resu) > $tam )?substr( $resu,0,$tam)."...":$resu);
 
 				if ($campo == $candidatos["CONFIGURACOES"] [CV])
 					echo "<TD>   ". (($candidato[$campo])? link_download($idcandidato, 'CV'): "-" )."  </td>";
 				else if ($campo == $candidatos["CONFIGURACOES"] ["github"])
 					echo "<TD>   ". (($candidato[$campo])? link_download($candidato[$campo], 'github'): "-" )."  </td>";
-				else
-					echo "<TD >   ". nl2br($resu)."   </td>";
+				else{
+					if (strlen($resu) > $tam){
+						echo "<TD > <textarea >". ($resu)."</textarea> </td>";
+					}
+					else {
+						echo "<TD >  ".  nl2br($resu)." </td>";
+					}
+				}
+
 
 
 	  }
@@ -83,9 +95,11 @@ foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 	echo "
 			 </tr>";
 }
-
+/*
 echo "<tr>
 					<td colspan=10><input type=submit value='Considerar estes candidatos >>>'> </td>
 		 </tr>";
+		 */
 ?>
+</tbody>
 </form>
