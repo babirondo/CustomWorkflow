@@ -140,7 +140,7 @@ foreach ( $vida_processo["FETCH_POSTO"] as $idposto => $conteudo_posto)
                         break;
 
                         default:
-                            echo " <input type=text size='". $linha["maxlenght"]."' name=idcampoposto[". $linha["idcampo"]."] value='". $linha["valor"]."'>";
+                            echo " <input type=text size='". $linha["maxlenght"]."' name=idcampoposto[". $linha["idcampo"]."] value='". $linha["valor"]."'> ".$linha["dica_preenchimento"];
                     }
 
                     echo " $exibir_erro

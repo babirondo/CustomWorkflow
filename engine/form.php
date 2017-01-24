@@ -15,7 +15,7 @@ namespace raiz;
             $form = CallAPI("POST", $SERVER_API."Engine/".$_GET["idfeature"]."/Form" , json_encode( $array) );
 						$array = null;
 
-						 //echo "<pre> "; var_dump($form);
+					// echo "<pre> "; var_dump($form);
 
             echo "<input type=hidden name=processo value='".$_GET["processo"]."' >";
             echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"]."' >";
@@ -23,7 +23,22 @@ namespace raiz;
 
             echo "<caption> ".$form["DADOS_POSTO"][nomeposto]."</caption>";
 
-            foreach ($form[FETCH_CAMPO] as $idcampo => $linha){
+						$campos_por_linha = $form[FETCH_FEATURE]["campos_por_linha"];
+						$contadorZ=0;
+
+
+						foreach ($form[FETCH_CAMPO] as $idordem => $ordem_exibicao){
+							$entrouFor++;
+							if ($entrouFor>0) {
+								echo "</tr>
+											<tr bgcolor=#ffffff>
+												<td  bgcolor=#ffffff colspan=".($campos_por_linha*2)."><HR></td>
+										 </tr>		";
+							}
+							$contadorZ=0;
+
+							foreach ($ordem_exibicao as $idcampo => $linha){
+										$contadorZ++;
                     $css=null;
                     $exibir_erro=null;
 
@@ -36,9 +51,11 @@ namespace raiz;
                     }
 
 
+										if ($contadorZ==1){
+											echo "<tr $css>";
+										}
 
-                    echo "<tr $css>
-                            <TD>   ".(($linha["obrigatorio"])?"<font color=#ff0000>*</font>":""). $linha["campo"]."</td>
+                    echo "  <TD>    ".(($linha["obrigatorio"])?"<font color=#ff0000>*</font>":""). $linha["campo"]."</td>
                             <TD> ";
 
 
@@ -82,22 +99,32 @@ namespace raiz;
                     }
 
                     echo " $exibir_erro
-                            </td>
-                       </tr>	 ";
+                            </td>";
+
+									if ($contadorZ == $campos_por_linha){
+											$contadorZ=0;
+											echo " </tr>	 ";
+									}
+
+
                     echo "<input type=hidden name=idworkflowdado[". $linha["idcampo"]."] value='". $linha["idworkflowdado"]."'>";
                     echo "<input type=hidden name=obrigatorio[". $linha["idcampo"]."] value='". $linha["obrigatorio"]."'>";
                     echo "<input type=hidden name=inputtype[". $linha["idcampo"]."]  value='". $linha["inputtype"]."'>";
             }
-
+					}
                 echo "
                     </table>
                     <table>
-                        <tr>
-														<td><input type=button   value=' <<< Voltar'> </td> ";
-		echo "         				  <td><input type=submit name=finalizar value='".$SYS_DEPARA_CAMPOS["bt_handover"]."'> </td> ";
+                        <tr>";
+								if (!OFFLINE){
+										echo "	<td><input type=button   value=' <<< Voltar'> </td> ";
+								}
+								echo "<td><input type=submit name=finalizar value='".$SYS_DEPARA_CAMPOS["bt_handover"]."'> </td> ";
 
-      if ($form[DADOS_POSTO][starter] != 1)
-          echo "     <td><input type=submit name=finalizar value='Salvar'> </td>";
+      					if ($form[DADOS_POSTO][starter] != 1 && !OFFLINE){
+									echo "     <td><input type=submit name=finalizar value='Salvar'> </td>";
+								}
+
 
                 echo "</tr> ";
 		?>

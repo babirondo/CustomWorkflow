@@ -8,7 +8,7 @@ require_once("classes/diversos.php");
  // testando commit do mac 2
 
 
-
+if ($_GET["msg"]) $erro = $_GET["msg"];
 
 if ( $_POST["logar"] == 1){
 	$array[login] = $_POST["login"];
@@ -47,19 +47,22 @@ if ( $_SESSION["idusuariologado"] > 0){
 				<input type=hidden name=logar value=1>
 			<tr height=5%>
 				<td>
-					<table border=0 width=100% >
+					<table border=0	width=30% align=center>
 					  <tr>
 					 		<td>Login</td>
 					 		<td> <input type=text name=login ></td>
+
 					  </tr>
 					  <tr>
 					 		<td>Senha</td>
 					 		<td> <input type=password name=senha ></td>
+							  <td> <input type=submit value="Logar" ></td>
 					  </tr>
 					  <tr>
-					 		<td> </td>
-					 		<td> <input type=submit value="Logar" ></td>
+					 		<td><BR><a href='index.php?offline=1&idfeature=18'>Solicitar acesso</a> </td>
+
 					  </tr>
+
 					  <tr>
 					 		<td> </td>
 					 		<td> <font color=#ff0000><?=$erro; ?></font> </td>

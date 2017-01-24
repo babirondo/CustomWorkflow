@@ -35,7 +35,7 @@ echo "<input type=hidden name=idposto_anterior value='".$_GET["idposto_anterior"
 
 echo "<thead>
 		<tr>";
-		echo "<Th><b>Selecionar</b></th>";
+	//	echo "<Th><b>Selecionar</b></th>";
 		echo "<Th><b>Match <BR> com a vaga</b></th>";
 
 		//echo "<PRE>"; var_dump($candidatos[TITULO]); exit;
@@ -54,10 +54,9 @@ echo "</tr>
 
 foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 	echo "<tr>";
-	echo "
-						<td align=center><input type=checkbox name=candidatos_selecionados[$idcandidato]  value='$idcandidato'> </td>";
+	//echo " <td align=center><input type=checkbox name=candidatos_selecionados[$idcandidato]  value='$idcandidato'> </td>";
 
-						echo " <td nowrap 	>".match_candidato_vaga( $candidato["match"])."</td>";
+		echo " <td nowrap 	>".match_candidato_vaga( $candidato["match"])."</td>";
 
 		foreach ($candidatos[TITULO]  as $campo => $linha){
 
@@ -80,7 +79,7 @@ foreach ( $candidatos["FETCH"] as $idcandidato => $candidato){
 					echo "<TD>   ". (($candidato[$campo])? link_download($candidato[$campo], 'github'): "-" )."  </td>";
 				else{
 					if (strlen($resu) > $tam){
-						echo "<TD > <textarea >". ($resu)."</textarea> </td>";
+						echo "<TD > <textarea class=parecertecnico >". ($resu)."</textarea> </td>";
 					}
 					else {
 						echo "<TD >  ".  nl2br($resu)." </td>";

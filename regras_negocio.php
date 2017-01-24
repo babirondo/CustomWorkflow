@@ -104,7 +104,7 @@ namespace raiz;
                               $array[$key][idpostocampo]  = $key;
                               $array[$key][valor]  = $FILES["idcampoposto"]["name"][$key]."|||".base64_encode( (fread(fopen($result, "r"), filesize($result))))  ;
 
- 
+
                               $array[$key][idworkflowdado]  = $POST["idworkflowdado"][$key];
                       }
                   }
@@ -246,6 +246,10 @@ namespace raiz;
 
                  if ($registering["resultado"] == "SUCESSO"){
                          $msg =  " <font color='#ff0000'>Dados registrados com sucesso</font> ";
+                         if (OFFLINE){
+                           session_destroy();
+                           header("location: login.php?msg=Registrado com Sucesso");
+                         }
                  }
                  if ($POST["idposto_anterior"]>0)
                  {

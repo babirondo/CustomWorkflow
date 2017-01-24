@@ -38,9 +38,10 @@
 	background: #EDE0B8	;
 	border: 1px 1px 1px 1px solid #ccc;
 }
-textarea {
-		width: 100%;
-		height: 90;
+
+.parecertecnico {
+		width: 300px;
+		height: 90px;
 }
 
 .grid .funcoes a {

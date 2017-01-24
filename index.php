@@ -4,12 +4,22 @@ namespace raiz;
 session_start();
 
 
+if ($_GET["offline"]==1){
 
-if (!$_SESSION["idusuariologado"])
+
+	session_destroy();
+	define("OFFLINE",     1);
+}
+else {
+
+		define("OFFLINE",    0);
+}
+
+if (!$_SESSION["idusuariologado"] && !OFFLINE)
 {
 	header("Location: login.php");
 }
-else if ($_SESSION["idusuariologado"] > 0 )
+else if ($_SESSION["idusuariologado"] > 0 || OFFLINE)
 {
 
 	error_reporting(E_ALL ^ E_NOTICE );
@@ -18,9 +28,9 @@ else if ($_SESSION["idusuariologado"] > 0 )
 	require_once("classes/diversos.php");
 	// testando commit do mac 2
 
-	$menus = CallAPI("get", $SERVER_API."getMenus/");
+	$usuario_logado_array["idusuario"] = $_SESSION["idusuariologado"];
 
-
+	$menus = CallAPI("POST", $SERVER_API."getMenus/",  json_encode( $usuario_logado_array) );
 
 	//FIXME: Resolver navegacao entre variaveis workflow e menu, usando os 2 no comeco mas é pra tirar o workflow
 	if ($_GET["idmenu"] >0){
@@ -64,7 +74,9 @@ else if ($_SESSION["idusuariologado"] > 0 )
 		<table class=tablehome>
 			<tr class=cabecalho>
 				<td>
-
+				<?php
+				if (!OFFLINE){
+				?>
 					<table>
 						<tr>
 							<td class=server_ambiente>   <?=$usar_ambiente;?> </td>
@@ -75,8 +87,10 @@ else if ($_SESSION["idusuariologado"] > 0 )
 								</td>
 							</tr>
 					</table>
+					<?php
+				}
+					?>
 				</td>
-
 		</tr>
 
 		<tr class=menu>
@@ -84,9 +98,12 @@ else if ($_SESSION["idusuariologado"] > 0 )
 				<table  >
 					<tr>
 						<?php
-						foreach ($menus[FETCH] as $linha){
+						if (is_array($menus)){
+							foreach ($menus[FETCH] as $linha){
 
-							echo "<TD> <a class=botao href='$PHP_SELF?idmenu=". $linha["idmenu"]."' >". $linha["menu"]."</a></td>";
+								echo "<TD> <a class=botao href='$PHP_SELF?idmenu=". $linha["idmenu"]."' >". $linha["menu"]."</a></td>";
+
+							}
 
 						}
 						?>
