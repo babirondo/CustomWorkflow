@@ -1,5 +1,6 @@
 <?php
 namespace raiz;
+error_reporting(E_ALL ^ E_NOTICE );
 
 session_start();
 
@@ -22,10 +23,9 @@ if (!$_SESSION["idusuariologado"] && !OFFLINE)
 else if ($_SESSION["idusuariologado"] > 0 || OFFLINE)
 {
 
-	error_reporting(E_ALL ^ E_NOTICE );
 
-	require_once("classes/globais.php");
 	require_once("classes/diversos.php");
+	require_once("classes/globais.php");
 	// testando commit do mac 2
 
 	$usuario_logado_array["idusuario"] = $_SESSION["idusuariologado"];
@@ -77,9 +77,9 @@ else if ($_SESSION["idusuariologado"] > 0 || OFFLINE)
 				<?php
 				if (!OFFLINE){
 				?>
-					<table>
+					<table border=0 	>
 						<tr>
-							<td class=server_ambiente>   <?=$usar_ambiente;?> </td>
+							<td width=80% class=server_ambiente>   <?=$usar_ambiente;?> </td>
 
 							<td class=usuariologado>
 								Usuário Logado: <?=$_SESSION["usuariologado"];?><BR>
@@ -98,12 +98,17 @@ else if ($_SESSION["idusuariologado"] > 0 || OFFLINE)
 				<table  >
 					<tr>
 						<?php
-						if (is_array($menus)){
+
+						if (count($menus)>2	){
 							foreach ($menus[FETCH] as $linha){
 
 								echo "<TD> <a class=botao href='$PHP_SELF?idmenu=". $linha["idmenu"]."' >". $linha["menu"]."</a></td>";
 
 							}
+
+						}
+						else {
+							echo "<TD> Nenhum menu disponível </td>";
 
 						}
 						?>

@@ -48,6 +48,11 @@ if ( $_SESSION["idusuariologado"] > 0){
 			<tr height=5%>
 				<td>
 					<table border=0	width=30% align=center>
+						<tr>
+
+							<td colspan=10 align=center> <font color=#0000ff><h3><?=(($usar_ambiente)?"$usar_ambiente":"Não Conectado"); ?></h3></font> </td>
+						</tr>
+
 					  <tr>
 					 		<td>Login</td>
 					 		<td> <input type=text name=login ></td>

@@ -42,14 +42,13 @@ function match_candidato_vaga($nota){
   return   ( $retorno ) ;
 }
 
- function CallAPI($method, $url, $data = false, $verbose=1)
+ function CallAPI($method, $url, $data = false)
  {
 
- 	GLOBAL $usar_ambiente;
+ 	GLOBAL $verbose;
  	$curl = curl_init();
 
-//	$verbose = 0;
- 	if ($usar_ambiente == "prod") $verbose = 0;
+
 
  	switch ($method)
  	{
